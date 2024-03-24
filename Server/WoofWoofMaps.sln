@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.9.34622.214
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WoofWoofMaps", "WoofWoofMaps\WoofWoofMaps.csproj", "{C4C73FA2-0FCF-4C6F-A456-0813346FA64D}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{C4C73FA2-0FCF-4C6F-A456-0813346FA64D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C4C73FA2-0FCF-4C6F-A456-0813346FA64D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C4C73FA2-0FCF-4C6F-A456-0813346FA64D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C4C73FA2-0FCF-4C6F-A456-0813346FA64D}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {6C7A93CC-5FB0-47B8-B23F-028B83B108C8}
+	EndGlobalSection
+EndGlobal
