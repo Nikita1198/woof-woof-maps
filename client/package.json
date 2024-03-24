@@ -1,0 +1,33 @@
+{
+  "name": "client",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "start": "expo start --dev-client",
+    "android": "expo run:android",
+    "ios": "expo run:ios",
+    "web": "expo start --web"
+  },
+  "dependencies": {
+    "@react-native-community/geolocation": "^3.2.0",
+    "@types/react": "~18.2.45",
+    "expo": "^50.0.14",
+    "expo-location": "~16.5.5",
+    "expo-status-bar": "~1.11.1",
+    "pod-install": "^0.2.0",
+    "react": "18.2.0",
+    "react-native": "0.73.6",
+    "react-native-expo-viewport-units": "^0.0.8",
+    "react-native-maps": "^1.11.3",
+    "react-native-yamap": "^4.1.18",
+    "typescript": "^5.3.0"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.20.0",
+    "@types/react-native": "^0.73.0"
+  },
+  "private": true,
+  "author": "",
+  "license": "ISC",
+  "description": ""
+}
