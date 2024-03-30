@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System.Security.Cryptography;
 using WoofWoofMaps.Models;
 
 namespace WoofWoofMaps.Contollers;
@@ -18,12 +19,21 @@ public class GeoPointsController : Controller
         _geoRouteRepository = geoRouteRepository;
     }
 
+
+
     [HttpPost]
     public async Task<ActionResult<GeoPoint>> PostGeoPoint(GeoPoint geoPoint)
     {
         if (!ModelState.IsValid)
         {
             return BadRequest(ModelState);
+        }
+
+        var exists = await _geoPointRepository
+            .ExistsAsync(geoPoint.Latitude, geoPoint.Longitude);
+        if (exists)
+        {
+            return Conflict(new { message = "A point with these coordinates already exists." });
         }
 
         _geoPointRepository.CreateGeoPoint(geoPoint);

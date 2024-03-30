@@ -1,4 +1,6 @@
-﻿namespace WoofWoofMaps.Models;
+﻿using Microsoft.EntityFrameworkCore;
+
+namespace WoofWoofMaps.Models;
 
 public class EFGeoPointRepository : IGeoPointRepository
 {
@@ -39,5 +41,12 @@ public class EFGeoPointRepository : IGeoPointRepository
     public void SaveGeoPoint(GeoPoint p)
     {
         _context.SaveChanges();
+    }
+
+    public async Task<bool> ExistsAsync(decimal latitude, decimal longitude)
+    {
+        return await _context.GeoPoints
+            .AnyAsync(p => p.Latitude == latitude
+                && p.Longitude == longitude);
     }
 }
