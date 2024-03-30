@@ -1,11 +1,12 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using System.Security.Cryptography;
 using WoofWoofMaps.Models;
+using WoofWoofMaps.Requests;
+using WoofWoofMaps.Responses;
 
 namespace WoofWoofMaps.Contollers;
 
-[Route("api/[controller]")]
+[Route("api/[controller]/[action]")]
 [ApiController]
 public class GeoPointsController : Controller
 {
@@ -19,7 +20,66 @@ public class GeoPointsController : Controller
         _geoRouteRepository = geoRouteRepository;
     }
 
+    [HttpGet]
+    public async Task<ActionResult<GetRouteWithPointsResponse>> GetRouteWithPoints(long routeId)
+    {
+        var geoRoute = await _geoRouteRepository
+            .FindByIdAsync(routeId);
+        if (geoRoute == null)
+        {
+            return NotFound($"The route with identifier {routeId} was not found.");
+        }
 
+        var geoPoints = _geoRouteRepository.GetAttachedPointsToRoute(routeId);
+
+        var result = new GetRouteWithPointsResponse(
+            RouteId: routeId,
+            Points: _geoRouteRepository
+                .GetAttachedPointsToRoute(routeId)
+                .ToArray());
+
+        return Ok(result);
+    }
+
+    [HttpPost]
+    public async Task<ActionResult<GeoRoute>> AttachPointToRoute(AttachPointToRouteRequest request)
+    {
+        var geoRoute = await _geoRouteRepository
+            .FindByIdAsync(request.RouteId);
+        if (geoRoute == null)
+        {
+            return NotFound($"The route with identifier {request.RouteId} was not found.");
+        }
+
+        var geoPoint = request.Point;
+        if (!ModelState.IsValid)
+        {
+            return BadRequest(ModelState);
+        }
+
+        var existingPoint = await _geoPointRepository
+            .FindByCoorinateAsync(geoPoint.Latitude, geoPoint.Longitude);
+        if (existingPoint == null)
+        {
+            _geoPointRepository.CreateGeoPoint(geoPoint);
+            existingPoint = geoPoint;
+        }
+
+        await _geoRouteRepository.AttachPointToRoute(existingPoint.Id, geoRoute.Id, request.TimeStamp);
+        return Ok();
+    }
+
+    [HttpPost]
+    public ActionResult<GeoRoute> PostGeoRoute(GeoRoute geoRoute)
+    {
+        if (!ModelState.IsValid)
+        {
+            return BadRequest(ModelState);
+        }
+
+        _geoRouteRepository.SaveGeoRoute(geoRoute);
+        return Ok(geoRoute);
+    }
 
     [HttpPost]
     public async Task<ActionResult<GeoPoint>> PostGeoPoint(GeoPoint geoPoint)

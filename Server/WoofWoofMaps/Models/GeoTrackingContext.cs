@@ -19,7 +19,7 @@ public class GeoTrackingContext : DbContext
 
         modelBuilder.Entity<GeoRoutePoint>(entity =>
         {
-            entity.HasKey(grp => new { grp.GeoPointId, grp.GeoRouteId });
+            entity.HasKey(grp => new { grp.GeoPointId, grp.GeoRouteId, grp.Timestamp });
             entity.HasOne(grp => grp.GeoPoint)
                   .WithMany(gp => gp.GeoRoutePoints)
                   .HasForeignKey(grp => grp.GeoPointId);

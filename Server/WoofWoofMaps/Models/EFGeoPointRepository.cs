@@ -49,4 +49,11 @@ public class EFGeoPointRepository : IGeoPointRepository
             .AnyAsync(p => p.Latitude == latitude
                 && p.Longitude == longitude);
     }
+
+    public async Task<GeoPoint?> FindByCoorinateAsync(decimal latitude, decimal longitude)
+    {
+        return await _context.GeoPoints
+            .FirstOrDefaultAsync(p => p.Latitude == latitude
+                && p.Longitude == longitude);
+    }
 }

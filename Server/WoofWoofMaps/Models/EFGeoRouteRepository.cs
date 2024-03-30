@@ -23,4 +23,30 @@ public class EFGeoRouteRepository : IGeoRouteRepository
         }
         _context.SaveChanges();
     }
+
+    public Task<GeoRoute?> FindByIdAsync(long Id)
+    {
+        return GeoRoutes
+            .FirstOrDefaultAsync(route => route.Id == Id);
+    }
+
+    public async Task AttachPointToRoute(long pointId, long routeId, DateTime timeStamp)
+    {
+        var geoRoutePoint = new GeoRoutePoint
+        {
+            GeoPointId = pointId,
+            GeoRouteId = routeId,
+            Timestamp = timeStamp
+        };
+
+        _context.GeoRoutePoints.Add(geoRoutePoint);
+        await _context.SaveChangesAsync();
+    }
+
+    public IEnumerable<GeoPoint> GetAttachedPointsToRoute(long routeId)
+    {
+        return _context.GeoRoutePoints
+            .Where(r => r.GeoRouteId == routeId)
+            .Select(r => r.GeoPoint);
+    }
 }
