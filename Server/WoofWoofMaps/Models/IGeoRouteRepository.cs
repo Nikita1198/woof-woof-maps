@@ -9,5 +9,5 @@ public interface IGeoRouteRepository
 
     Task AttachPointToRoute(long pointId, long routeId, DateTime timeStamp);
 
-    IEnumerable<GeoPoint> GetAttachedPointsToRoute(long routeId);
+    Task<List<(GeoPoint Point, DateTime Timestamp)>> GetAttachedPointsToRoute(long routeId);
 }

@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using WoofWoofMaps.DTOs;
 using WoofWoofMaps.Models;
 using WoofWoofMaps.Requests;
 using WoofWoofMaps.Responses;
@@ -30,12 +31,16 @@ public class GeoPointsController : Controller
             return NotFound($"The route with identifier {routeId} was not found.");
         }
 
-        var geoPoints = _geoRouteRepository.GetAttachedPointsToRoute(routeId);
+        var geoPoints = await _geoRouteRepository
+                .GetAttachedPointsToRoute(routeId);
 
         var result = new GetRouteWithPointsResponse(
             RouteId: routeId,
-            Points: _geoRouteRepository
-                .GetAttachedPointsToRoute(routeId)
+            Points: geoPoints
+                .Select(p => new PointDto(
+                    Latitude: p.Point.Latitude,
+                    Longitude: p.Point.Longitude,
+                    Timestamp: p.Timestamp))
                 .ToArray());
 
         return Ok(result);

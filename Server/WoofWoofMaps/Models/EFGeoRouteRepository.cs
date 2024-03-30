@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using System.ComponentModel.DataAnnotations;
 namespace WoofWoofMaps.Models;
 
 public class EFGeoRouteRepository : IGeoRouteRepository
@@ -43,10 +44,15 @@ public class EFGeoRouteRepository : IGeoRouteRepository
         await _context.SaveChangesAsync();
     }
 
-    public IEnumerable<GeoPoint> GetAttachedPointsToRoute(long routeId)
+    public async Task<List<(GeoPoint Point, DateTime Timestamp)>> GetAttachedPointsToRoute(long routeId)
     {
-        return _context.GeoRoutePoints
+        var queryResult = await _context.GeoRoutePoints
             .Where(r => r.GeoRouteId == routeId)
-            .Select(r => r.GeoPoint);
+            .Select(r => new { r.GeoPoint, r.Timestamp })
+            .ToListAsync();
+
+        var result = queryResult.Select(r => (r.GeoPoint, r.Timestamp)).ToList();
+
+        return result;
     }
 }
