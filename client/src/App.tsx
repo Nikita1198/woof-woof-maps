@@ -1,3 +1,4 @@
+import React from "react";
 import "./App.css";
 import { YMaps, Map, Button } from "@pbe/react-yandex-maps";
 
