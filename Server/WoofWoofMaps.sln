@@ -3,7 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.9.34622.214
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WoofWoofMaps", "WoofWoofMaps\WoofWoofMaps.csproj", "{C4C73FA2-0FCF-4C6F-A456-0813346FA64D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WoofWoofMaps", "WoofWoofMaps\WoofWoofMaps.csproj", "{C4C73FA2-0FCF-4C6F-A456-0813346FA64D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WoofWoofMaps.TelegramBot", "WoofWoofMaps.TelegramBot\WoofWoofMaps.TelegramBot.csproj", "{0285CA31-DBD6-4A00-8B54-0D7757034920}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,6 +17,10 @@ Global
 		{C4C73FA2-0FCF-4C6F-A456-0813346FA64D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C4C73FA2-0FCF-4C6F-A456-0813346FA64D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C4C73FA2-0FCF-4C6F-A456-0813346FA64D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0285CA31-DBD6-4A00-8B54-0D7757034920}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0285CA31-DBD6-4A00-8B54-0D7757034920}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0285CA31-DBD6-4A00-8B54-0D7757034920}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0285CA31-DBD6-4A00-8B54-0D7757034920}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
