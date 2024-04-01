@@ -3,64 +3,96 @@ import {
   Avatar,
   Button,
   Group,
-  Image,
   PanelHeader,
+  PanelHeaderBack,
   Placeholder,
   Separator,
 } from "@vkontakte/vkui";
 import { Panel } from "@vkontakte/vkui/dist/components/Panel/Panel";
 import { View } from "@vkontakte/vkui/dist/components/View/View";
 import React from "react";
+import { useWebApp } from "@vkruglikov/react-telegram-web-app";
+
+const botUrl = "https://t.me/Woof_WoofBot";
 
 const MainScreens = () => {
-  const [activePanel, setActivePanel] = React.useState("main");
+  const [activePanel, setActivePanel] = React.useState("panel1");
+
+  const WebApp = useWebApp();
+  const openBotLink = () => {
+    if (WebApp) {
+      WebApp.openLink(botUrl);
+    }
+  };
 
   return (
     <View activePanel={activePanel}>
-      <Panel id={"main"}>
+      <Panel id={"panel1"}>
         <Group>
           <Placeholder
+            style={{ paddingTop: 25, paddingBottom: 30 }}
             icon={
-              <Image
+              <img
                 src="..\walk-the-pet.png"
-                style={{ minWidth: 80, minHeight: 80, border: 0 }}
+                style={{ maxWidth: 82, maxHeight: 82 }}
               />
             }
             header="Владелец питомца"
+            action={
+              <Button size="m" onClick={() => setActivePanel("panel3")}>
+                Найти выгульщика
+              </Button>
+            }
           >
             Найдите надежного человека для прогулки с вашим пушистым другом.
           </Placeholder>
           <Separator />
           <Placeholder
+            style={{ paddingTop: 20 }}
             icon={
-              <Image
+              <img
                 src="..\walker_light.png"
-                style={{ minWidth: 80, minHeight: 80, border: 0 }}
+                style={{ maxWidth: 82, maxHeight: 82 }}
               />
             }
             header="Выгульщик"
-            action={<Button size="m">Начните своё приключение</Button>}
+            action={
+              <Button size="m" onClick={() => setActivePanel("panel2")}>
+                Начните своё приключение
+              </Button>
+            }
           >
             Поделитесь вашей любовью к собакам, помогая владельцам в их заботе.
           </Placeholder>
         </Group>
       </Panel>
 
-      <Panel id={"main2"}>
-        <PanelHeader after={<Avatar size={36} />}>Panel 2</PanelHeader>
+      <Panel id={"panel2"}>
+        <PanelHeader
+          delimiter="spacing"
+          before={<PanelHeaderBack onClick={() => setActivePanel("panel1")} />}
+        ></PanelHeader>
         <Group>
-          <Placeholder>Доступ запрещён</Placeholder>
-          <Separator />
           <Placeholder
-            header="Находите друзей"
-            action={<Button size="m">Найти друзей</Button>}
+            icon={
+              <img
+                src="..\location.png"
+                style={{ maxWidth: 160, maxHeight: 160 }}
+              />
+            }
+            header="Готовы выгуливать?"
+            action={
+              <Button size="m" onClick={openBotLink}>
+                Перейти к боту
+              </Button>
+            }
           >
-            Здесь будут отображаться люди, которых вы добавите в друзья
+            Нажмите, чтобы перейти к боту и поделиться вашей геопозицией.
           </Placeholder>
         </Group>
       </Panel>
 
-      <Panel id={"main3"}>
+      <Panel id={"panel3"}>
         <PanelHeader after={<Avatar size={36} />}>Panel 3</PanelHeader>
         <Group>
           <Placeholder
