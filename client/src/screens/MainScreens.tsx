@@ -22,7 +22,7 @@ const MainScreens = () => {
           <Placeholder
             icon={
               <Image
-                src="..\public\walk-the-pet.png"
+                src="..\walk-the-pet.png"
                 style={{ minWidth: 80, minHeight: 80, border: 0 }}
               />
             }
@@ -34,7 +34,7 @@ const MainScreens = () => {
           <Placeholder
             icon={
               <Image
-                src="..\public\walker_light.png"
+                src="..\walker_light.png"
                 style={{ minWidth: 80, minHeight: 80, border: 0 }}
               />
             }
