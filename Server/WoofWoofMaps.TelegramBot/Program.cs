@@ -27,7 +27,7 @@ Console.WriteLine($"Bot {me.Username} is ready to receive messages.");
 botClient.StartReceiving(
     HandleUpdateAsync,
     HandleErrorAsync,
-    new ReceiverOptions { AllowedUpdates = { } },
+    new ReceiverOptions { AllowedUpdates = [UpdateType.Message, UpdateType.EditedMessage], },
     cancellationToken: cts.Token);
 
 Console.WriteLine("Press Enter to exit");
@@ -45,30 +45,29 @@ static async Task HandleUpdateAsync(ITelegramBotClient botClient, Update update,
 
         if (isLive)
         {
-            var lastLocation = location.HorizontalAccuracy;
-            _ = Task.Run(async () =>
-                {
-                    var livePeriod = location!.LivePeriod;
-                    for (int secondCounter = 0; secondCounter < livePeriod; secondCounter += 5)
-                    {
-                        // Имитируем задержку без блокирования потока.
-                        await Task.Delay(5000, cancellationToken);
-
-                        // Обновляем сообщение о трансляции.
-                        Console.WriteLine($"Updating live location: {location.Latitude}, {location.Longitude} for chat {chatId}.");
-                        string updateMessage = $"Обновление трансляции геопозиции: {location.Latitude}, {location.Longitude}\n До конца трансляции осталось {livePeriod - secondCounter} секунд";
-                        await botClient.SendTextMessageAsync(chatId, updateMessage, cancellationToken: cancellationToken);
-                    }
-                }, cancellationToken);
+            // Просто отобразите информацию о полученном местоположении
+            Console.WriteLine($"Received live location: {location.Latitude}, {location.Longitude} from chat {chatId}.");
+            string messageText = $"Трансляция геопозиции в реальном времени: {location.Latitude}, {location.Longitude}";
+            await botClient.SendTextMessageAsync(chatId, messageText, cancellationToken: cancellationToken);
         }
+        else
+        {
+            // Этот блок будет выполнен, если местоположение не транслируется в реальном времени
+            Console.WriteLine($"Received single location: {location.Latitude}, {location.Longitude} from chat {chatId}.");
+            string messageText = $"Получена геопозиция: {location.Latitude}, {location.Longitude}";
+            await botClient.SendTextMessageAsync(chatId, messageText, cancellationToken: cancellationToken);
+        }
+    }
 
+    if (update.Type == UpdateType.EditedMessage && update.EditedMessage!.Type == MessageType.Location)
+    {
+        var chatId = update.EditedMessage.Chat.Id;
+        var location = update.EditedMessage.Location;
+        var isLive = update.EditedMessage.Location!.LivePeriod != null;
 
-        Console.WriteLine($"Received location: {location!.Latitude}, {location!.Longitude} from chat {chatId}. Is live: {isLive}");
-
-        string messageText = isLive
-            ? $"Трансляция геопозиции в реальном времени: {location.Latitude}, {location.Longitude}"
-            : $"Получена геопозиция: {location.Latitude}, {location.Longitude}";
-
+        // Просто отобразите информацию о полученном местоположении
+        Console.WriteLine($"Received live location: {location.Latitude}, {location.Longitude} from chat {chatId}.");
+        string messageText = $"Трансляция геопозиции в реальном времени: {location.Latitude}, {location.Longitude}";
         await botClient.SendTextMessageAsync(chatId, messageText, cancellationToken: cancellationToken);
     }
 }
