@@ -1,8 +1,15 @@
-import { AppRoot, ConfigProvider, AdaptivityProvider } from "@vkontakte/vkui";
+import { Suspense, lazy } from "react";
+import {
+  AppRoot,
+  ConfigProvider,
+  AdaptivityProvider,
+  Spinner,
+} from "@vkontakte/vkui";
 import "@vkontakte/vkui/dist/vkui.css";
 import "./App.css";
 import { useThemeParams } from "@vkruglikov/react-telegram-web-app";
-import MainScreens from "./screens/MainScreens";
+
+const WelcomeScreens = lazy(() => import("./screens/WelcomeScreens"));
 
 function App() {
   const [colorScheme] = useThemeParams();
@@ -11,7 +18,9 @@ function App() {
     <ConfigProvider appearance={colorScheme}>
       <AdaptivityProvider>
         <AppRoot>
-          <MainScreens />
+          <Suspense fallback={<Spinner size="large" />}>
+            <WelcomeScreens />
+          </Suspense>
         </AppRoot>
       </AdaptivityProvider>
     </ConfigProvider>
