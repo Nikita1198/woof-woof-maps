@@ -30,7 +30,6 @@ const MainScreens = () => {
       <Panel id={"panel1"}>
         <Group>
           <Placeholder
-            style={{ paddingTop: 25, paddingBottom: 30 }}
             icon={
               <img
                 src="..\walk-the-pet.png"
@@ -48,7 +47,6 @@ const MainScreens = () => {
           </Placeholder>
           <Separator />
           <Placeholder
-            style={{ paddingTop: 20 }}
             icon={
               <img
                 src="..\walker_light.png"
