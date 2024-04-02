@@ -13,7 +13,7 @@ import { View } from "@vkontakte/vkui/dist/components/View/View";
 import React from "react";
 import { useWebApp } from "@vkruglikov/react-telegram-web-app";
 
-const botUrl = "https://t.me/Woof_WoofBot";
+//const botUrl = "https://t.me/Woof_WoofBot";
 
 const MainScreens = () => {
   const [activePanel, setActivePanel] = React.useState("panel1");
@@ -21,7 +21,8 @@ const MainScreens = () => {
   const WebApp = useWebApp();
   const openBotLink = () => {
     if (WebApp) {
-      WebApp.openLink(botUrl);
+      WebApp.close();
+      //WebApp.openLink(botUrl);
     }
   };
 
