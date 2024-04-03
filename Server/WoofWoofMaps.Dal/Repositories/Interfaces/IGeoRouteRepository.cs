@@ -1,4 +1,6 @@
-﻿namespace WoofWoofMaps.Models;
+﻿using WoofWoofMaps.Dal.Entities;
+
+namespace WoofWoofMaps.Dal.Repositories.Interfaces;
 
 public interface IGeoRouteRepository
 {

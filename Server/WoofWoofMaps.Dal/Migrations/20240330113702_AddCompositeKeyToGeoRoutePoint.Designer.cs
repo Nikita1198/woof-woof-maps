@@ -2,18 +2,22 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
-using WoofWoofMaps.Models;
+using WoofWoofMaps.Dal;
+using WoofWoofMaps.Dal.Entities;
 
 #nullable disable
 
-namespace WoofWoofMaps.Migrations
+namespace WoofWoofMaps.Dal.Migrations
 {
     [DbContext(typeof(GeoTrackingContext))]
-    partial class GeoTrackingContextModelSnapshot : ModelSnapshot
+    [Migration("20240330113702_AddCompositeKeyToGeoRoutePoint")]
+    partial class AddCompositeKeyToGeoRoutePoint
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

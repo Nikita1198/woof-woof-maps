@@ -1,13 +1,11 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
 using System.ComponentModel.DataAnnotations;
-using Microsoft.AspNetCore.Mvc.ModelBinding;
 using System.Text.Json.Serialization;
 
-namespace WoofWoofMaps.Models;
+namespace WoofWoofMaps.Dal.Entities;
 
 public class GeoPoint
 {
-    [BindNever]
     public long Id { get; set; }
 
     [Required]

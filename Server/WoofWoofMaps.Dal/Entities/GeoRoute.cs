@@ -1,12 +1,10 @@
-﻿using Microsoft.AspNetCore.Mvc.ModelBinding;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 using System.Text.Json.Serialization;
 
-namespace WoofWoofMaps.Models;
+namespace WoofWoofMaps.Dal.Entities;
 
 public class GeoRoute
 {
-    [BindNever]
     public long Id { get; set; }
 
 

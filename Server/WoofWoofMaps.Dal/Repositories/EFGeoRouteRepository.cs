@@ -1,6 +1,9 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using System.ComponentModel.DataAnnotations;
-namespace WoofWoofMaps.Models;
+using WoofWoofMaps.Dal.Entities;
+using WoofWoofMaps.Dal.Repositories.Interfaces;
+
+namespace WoofWoofMaps.Dal.Repositories;
 
 public class EFGeoRouteRepository : IGeoRouteRepository
 {

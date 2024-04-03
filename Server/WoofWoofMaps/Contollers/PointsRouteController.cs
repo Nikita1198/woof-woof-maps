@@ -1,20 +1,21 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using WoofWoofMaps.DTOs;
-using WoofWoofMaps.Models;
-using WoofWoofMaps.Requests;
-using WoofWoofMaps.Responses;
+using WoofWoofMaps.Api.Models;
+using WoofWoofMaps.Api.Requests;
+using WoofWoofMaps.Api.Responses;
+using WoofWoofMaps.Dal.Entities;
+using WoofWoofMaps.Dal.Repositories.Interfaces;
 
-namespace WoofWoofMaps.Contollers;
+namespace WoofWoofMaps.Api.Contollers;
 
 [Route("api/[controller]/[action]")]
 [ApiController]
-public class GeoPointsController : Controller
+public class PointsRouteController : Controller
 {
     private readonly IGeoPointRepository _geoPointRepository;
     private readonly IGeoRouteRepository _geoRouteRepository;
 
-    public GeoPointsController(IGeoPointRepository geoPointRepository,
+    public PointsRouteController(IGeoPointRepository geoPointRepository,
         IGeoRouteRepository geoRouteRepository)
     {
         _geoPointRepository = geoPointRepository;
@@ -37,17 +38,19 @@ public class GeoPointsController : Controller
         var result = new GetRouteWithPointsResponse(
             RouteId: routeId,
             Points: geoPoints
-                .Select(p => new PointDto(
-                    Latitude: p.Point.Latitude,
-                    Longitude: p.Point.Longitude,
-                    Timestamp: p.Timestamp))
+                .Select(p => new Point()
+                {
+                    Latitude = p.Point.Latitude,
+                    Longitude = p.Point.Longitude,
+                    Timestamp = p.Timestamp
+                })
                 .ToArray());
 
         return Ok(result);
     }
 
     [HttpPost]
-    public async Task<ActionResult<GeoRoute>> AttachPointToRoute(AttachPointToRouteRequest request)
+    public async Task<ActionResult> AttachPointToRoute(AttachPointToRouteRequest request)
     {
         var geoRoute = await _geoRouteRepository
             .FindByIdAsync(request.RouteId);
@@ -56,54 +59,39 @@ public class GeoPointsController : Controller
             return NotFound($"The route with identifier {request.RouteId} was not found.");
         }
 
-        var geoPoint = request.Point;
+        var point = request.Point;
         if (!ModelState.IsValid)
         {
             return BadRequest(ModelState);
         }
 
         var existingPoint = await _geoPointRepository
-            .FindByCoorinateAsync(geoPoint.Latitude, geoPoint.Longitude);
+            .FindByCoorinateAsync(point.Latitude, point.Longitude);
         if (existingPoint == null)
         {
+            var geoPoint = new GeoPoint()
+            {
+                Latitude = point.Latitude,
+                Longitude = point.Longitude,
+            };
             _geoPointRepository.CreateGeoPoint(geoPoint);
             existingPoint = geoPoint;
         }
 
-        await _geoRouteRepository.AttachPointToRoute(existingPoint.Id, geoRoute.Id, request.TimeStamp);
+        await _geoRouteRepository.AttachPointToRoute(existingPoint.Id, geoRoute.Id, request.Point.Timestamp);
         return Ok();
     }
 
     [HttpPost]
-    public ActionResult<GeoRoute> PostGeoRoute(GeoRoute geoRoute)
+    public ActionResult<GeoRoute> PostGeoRoute(Models.Route Route)
     {
         if (!ModelState.IsValid)
         {
             return BadRequest(ModelState);
         }
-
+        var geoRoute = new GeoRoute() { Name = Route.Name };
         _geoRouteRepository.SaveGeoRoute(geoRoute);
         return Ok(geoRoute);
-    }
-
-    [HttpPost]
-    public async Task<ActionResult<GeoPoint>> PostGeoPoint(GeoPoint geoPoint)
-    {
-        if (!ModelState.IsValid)
-        {
-            return BadRequest(ModelState);
-        }
-
-        var exists = await _geoPointRepository
-            .ExistsAsync(geoPoint.Latitude, geoPoint.Longitude);
-        if (exists)
-        {
-            return Conflict(new { message = "A point with these coordinates already exists." });
-        }
-
-        _geoPointRepository.CreateGeoPoint(geoPoint);
-
-        return CreatedAtAction("GetGeoPoint", new { id = geoPoint.Id }, geoPoint);
     }
 
     [HttpGet("{id}")]
