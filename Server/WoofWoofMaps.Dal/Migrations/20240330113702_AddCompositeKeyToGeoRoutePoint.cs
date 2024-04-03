@@ -2,7 +2,7 @@
 
 #nullable disable
 
-namespace WoofWoofMaps.Migrations
+namespace WoofWoofMaps.Dal.Migrations
 {
     /// <inheritdoc />
     public partial class AddCompositeKeyToGeoRoutePoint : Migration

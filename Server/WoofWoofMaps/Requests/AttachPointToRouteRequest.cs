@@ -1,5 +1,5 @@
-﻿using WoofWoofMaps.Models;
+﻿using WoofWoofMaps.Api.Models;
 
-namespace WoofWoofMaps.Requests;
+namespace WoofWoofMaps.Api.Requests;
 
-public record AttachPointToRouteRequest(GeoPoint Point, long RouteId, DateTime TimeStamp);
+public record AttachPointToRouteRequest(Point Point, long RouteId);

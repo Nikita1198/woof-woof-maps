@@ -5,15 +5,16 @@ using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
-using WoofWoofMaps.Models;
+using WoofWoofMaps.Dal;
+using WoofWoofMaps.Dal.Entities;
 
 #nullable disable
 
-namespace WoofWoofMaps.Migrations
+namespace WoofWoofMaps.Dal.Migrations
 {
     [DbContext(typeof(GeoTrackingContext))]
-    [Migration("20240330113702_AddCompositeKeyToGeoRoutePoint")]
-    partial class AddCompositeKeyToGeoRoutePoint
+    [Migration("20240324163546_Initial")]
+    partial class Initial
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -72,7 +73,7 @@ namespace WoofWoofMaps.Migrations
                     b.Property<DateTime>("Timestamp")
                         .HasColumnType("timestamp with time zone");
 
-                    b.HasKey("GeoPointId", "GeoRouteId", "Timestamp");
+                    b.HasKey("GeoPointId", "GeoRouteId");
 
                     b.HasIndex("GeoRouteId");
 

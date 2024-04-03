@@ -25,7 +25,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Migrations\" />
+    <ProjectReference Include="..\WoofWoofMaps.Dal\WoofWoofMaps.Dal.csproj" />
   </ItemGroup>
 
 </Project>

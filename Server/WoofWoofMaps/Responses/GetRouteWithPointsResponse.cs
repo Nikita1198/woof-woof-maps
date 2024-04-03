@@ -1,6 +1,5 @@
-﻿using WoofWoofMaps.DTOs;
-using WoofWoofMaps.Models;
+﻿using WoofWoofMaps.Api.Models;
 
-namespace WoofWoofMaps.Responses;
+namespace WoofWoofMaps.Api.Responses;
 
-public record GetRouteWithPointsResponse(long RouteId, PointDto[] Points);
+public record GetRouteWithPointsResponse(long RouteId, Point[] Points);

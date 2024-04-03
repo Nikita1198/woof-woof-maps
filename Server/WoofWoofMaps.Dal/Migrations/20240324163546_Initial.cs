@@ -4,7 +4,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 #nullable disable
 
-namespace WoofWoofMaps.Migrations
+namespace WoofWoofMaps.Dal.Migrations
 {
     /// <inheritdoc />
     public partial class Initial : Migration

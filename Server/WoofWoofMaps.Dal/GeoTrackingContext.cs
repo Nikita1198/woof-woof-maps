@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using WoofWoofMaps.Dal.Entities;
 
-namespace WoofWoofMaps.Models;
+namespace WoofWoofMaps.Dal;
 
 public class GeoTrackingContext : DbContext
 {
