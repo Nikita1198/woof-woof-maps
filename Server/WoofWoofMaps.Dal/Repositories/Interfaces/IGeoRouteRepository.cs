@@ -9,7 +9,7 @@ public interface IGeoRouteRepository
 
     Task<GeoRoute?> FindByIdAsync(long Id);
 
-    Task AttachPointToRoute(long pointId, long routeId, DateTime timeStamp);
+    Task AttachPointToRouteAsync(long pointId, long routeId, DateTime timeStamp);
 
-    Task<List<(GeoPoint Point, DateTime Timestamp)>> GetAttachedPointsToRoute(long routeId);
+    Task<List<(GeoPoint Point, DateTime Timestamp)>> GetAttachedPointsToRouteAsync(long routeId);
 }
