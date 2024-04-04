@@ -34,7 +34,7 @@ public class EFGeoRouteRepository : IGeoRouteRepository
             .FirstOrDefaultAsync(route => route.Id == Id);
     }
 
-    public async Task AttachPointToRoute(long pointId, long routeId, DateTime timeStamp)
+    public async Task AttachPointToRouteAsync(long pointId, long routeId, DateTime timeStamp)
     {
         var geoRoutePoint = new GeoRoutePoint
         {
@@ -47,7 +47,7 @@ public class EFGeoRouteRepository : IGeoRouteRepository
         await _context.SaveChangesAsync();
     }
 
-    public async Task<List<(GeoPoint Point, DateTime Timestamp)>> GetAttachedPointsToRoute(long routeId)
+    public async Task<List<(GeoPoint Point, DateTime Timestamp)>> GetAttachedPointsToRouteAsync(long routeId)
     {
         var queryResult = await _context.GeoRoutePoints
             .Where(r => r.GeoRouteId == routeId)
