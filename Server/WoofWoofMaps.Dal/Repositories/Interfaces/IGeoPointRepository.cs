@@ -9,7 +9,7 @@ public interface IGeoPointRepository
     void CreateGeoPoint(GeoPoint p);
     void DeleteGeoPoint(GeoPoint p);
     void AddPointToRoute(long pointId, long routeId, DateTime timestamp);
-    Task<bool> ExistsAsync(decimal latitude, decimal longitude);
+    Task<bool> ExistsAsync(double latitude, double longitude);
 
-    Task<GeoPoint?> FindByCoorinateAsync(decimal latitude, decimal longitude);
+    Task<GeoPoint?> FindByCoorinateAsync(double latitude, double longitude);
 }

@@ -6,9 +6,9 @@ public record Point
 {
     [Required]
     [Range(0.00001, double.MaxValue, ErrorMessage = "Please enter a positive latitude")]
-    public decimal Latitude { get; set; }
+    public double Latitude { get; set; }
     [Required]
     [Range(0.00001, double.MaxValue, ErrorMessage = "Please enter a positive longitude")]
-    public decimal Longitude { get; set; }
+    public double Longitude { get; set; }
     public DateTime Timestamp { get; set; }
 };

@@ -31,6 +31,6 @@ internal static class Configurator
                 services.AddDalInfrastructure();
                 services.AddDalRepositories();
                 services.AddBll();
-                services.AddSingleton<MessageHandler>();
+                services.AddScoped<MessageHandler>();
             });
 }

@@ -10,13 +10,13 @@ public class GeoPoint
 
     [Required]
     [Range(0.01, double.MaxValue, ErrorMessage = "Please enter a positive latitude")]
-    [Column(TypeName = "decimal(9,6)")]
-    public decimal Latitude { get; set; }
+    [Column(TypeName = "double precision")]
+    public double Latitude { get; set; }
 
     [Required]
     [Range(0.01, double.MaxValue, ErrorMessage = "Please enter a positive longitude")]
-    [Column(TypeName = "decimal(9,6)")]
-    public decimal Longitude { get; set; }
+    [Column(TypeName = "double precision")]
+    public double Longitude { get; set; }
     [JsonIgnore]
     public List<GeoRoutePoint> GeoRoutePoints { get; set; } = new List<GeoRoutePoint>();
 }

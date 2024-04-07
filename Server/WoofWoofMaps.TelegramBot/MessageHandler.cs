@@ -49,8 +49,8 @@ internal sealed class MessageHandler
         if (isLiveLocation)
         {
             var routeId = _pointsRouteService.CreateRoute($"{message.Chat.Username}:{chatId}");
-            await _pointsRouteService.AttachPointToRouteAsync(new PointModel(decimal.Parse(location.Latitude.ToString()),
-                decimal.Parse(location.Longitude.ToString()), message.Date), routeId);
+            await _pointsRouteService.AttachPointToRouteAsync(new PointModel(location.Latitude,
+                location.Longitude, message.Date), routeId);
             chatRoutes[chatId] = new() 
             { 
                 RouteId = routeId, 
@@ -75,8 +75,8 @@ internal sealed class MessageHandler
         if (chatRoutes.TryGetValue(message.Chat.Id, out RouteIdWithLastUpdateTime? routeIdWithLastUpdate)
             && IsEnoughTimeToUpdate(editDate, routeIdWithLastUpdate.LastUpdateTime))
         {
-            await _pointsRouteService.AttachPointToRouteAsync(new PointModel(decimal.Parse(location.Latitude.ToString()),
-                decimal.Parse(location.Longitude.ToString()), editDate), routeIdWithLastUpdate.RouteId);
+            await _pointsRouteService.AttachPointToRouteAsync(new PointModel(location.Latitude,
+                location.Longitude, editDate), routeIdWithLastUpdate.RouteId);
 
             chatRoutes[message.Chat.Id].LastUpdateTime = editDate;
 

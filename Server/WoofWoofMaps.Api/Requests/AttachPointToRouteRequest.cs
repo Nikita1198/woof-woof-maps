@@ -3,6 +3,6 @@
 namespace WoofWoofMaps.Api.Requests;
 
 public record AttachPointToRouteRequest(long RouteId,
-                                        decimal Latitude,
-                                        decimal Longitude,
+                                        double Latitude,
+                                        double Longitude,
                                         DateTime Timestamp);

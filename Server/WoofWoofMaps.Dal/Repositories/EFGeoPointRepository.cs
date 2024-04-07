@@ -46,14 +46,14 @@ public class EFGeoPointRepository : IGeoPointRepository
         _context.SaveChanges();
     }
 
-    public async Task<bool> ExistsAsync(decimal latitude, decimal longitude)
+    public async Task<bool> ExistsAsync(double latitude, double longitude)
     {
         return await _context.GeoPoints
             .AnyAsync(p => p.Latitude == latitude
                 && p.Longitude == longitude);
     }
 
-    public async Task<GeoPoint?> FindByCoorinateAsync(decimal latitude, decimal longitude)
+    public async Task<GeoPoint?> FindByCoorinateAsync(double latitude, double longitude)
     {
         return await _context.GeoPoints
             .FirstOrDefaultAsync(p => p.Latitude == latitude
