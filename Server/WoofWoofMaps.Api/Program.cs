@@ -5,7 +5,7 @@ using WoofWoofMaps.Dal;
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Services.AddDalInfrastructure(builder.Configuration)
+builder.Services.AddDalInfrastructure()
     .AddDalRepositories()
     .AddBll();
 
