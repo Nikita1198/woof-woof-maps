@@ -15,8 +15,7 @@ namespace WoofWoofMaps.Dal;
 public static class ServiceCollectionExtensions
 {
     public static IServiceCollection AddDalInfrastructure(
-        this IServiceCollection services,
-        IConfigurationRoot config)
+        this IServiceCollection services)
     {
         services.AddDbContext<GeoTrackingContext>(options =>
         {
