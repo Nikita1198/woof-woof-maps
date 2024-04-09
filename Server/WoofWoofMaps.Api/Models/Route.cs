@@ -1,3 +1,3 @@
-﻿namespace WoofWoofMaps.Api.Models;
+﻿namespace WoofWoofMaps.ApiLocation.Models;
 
 public record Route(string Name);

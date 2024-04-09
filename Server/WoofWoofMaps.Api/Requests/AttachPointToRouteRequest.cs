@@ -1,6 +1,6 @@
-﻿using WoofWoofMaps.Api.Models;
+﻿using WoofWoofMaps.ApiLocation.Models;
 
-namespace WoofWoofMaps.Api.Requests;
+namespace WoofWoofMaps.ApiLocation.Requests;
 
 public record AttachPointToRouteRequest(long RouteId,
                                         double Latitude,

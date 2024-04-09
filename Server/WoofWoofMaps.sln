@@ -10,9 +10,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WoofWoofMaps.TelegramBot", 
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WoofWoofMaps.Dal", "WoofWoofMaps.Dal\WoofWoofMaps.Dal.csproj", "{11B37081-8836-412D-99EB-23E4E50865E5}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WoofWoofMaps.Api", "WoofWoofMaps.Api\WoofWoofMaps.Api.csproj", "{309EF38D-F04F-4230-BB98-7B6C43FBFAE1}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WoofWoofMaps.ApiLocation", "WoofWoofMaps.Api\WoofWoofMaps.ApiLocation.csproj", "{309EF38D-F04F-4230-BB98-7B6C43FBFAE1}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WoofWoofMaps.Bll", "WoofWoofMaps.Bll\WoofWoofMaps.Bll.csproj", "{35833A86-1312-420E-9FAD-902BA45208BA}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WoofWoofMaps.Bll", "WoofWoofMaps.Bll\WoofWoofMaps.Bll.csproj", "{35833A86-1312-420E-9FAD-902BA45208BA}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WoofWoofMaps.ApiUsers", "WoofWoofMaps.ApiUsers\WoofWoofMaps.ApiUsers.csproj", "{71B1119A-6A67-4074-AE4C-8CF115916575}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -36,6 +38,10 @@ Global
 		{35833A86-1312-420E-9FAD-902BA45208BA}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{35833A86-1312-420E-9FAD-902BA45208BA}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{35833A86-1312-420E-9FAD-902BA45208BA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{71B1119A-6A67-4074-AE4C-8CF115916575}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{71B1119A-6A67-4074-AE4C-8CF115916575}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{71B1119A-6A67-4074-AE4C-8CF115916575}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{71B1119A-6A67-4074-AE4C-8CF115916575}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -1,15 +1,12 @@
-using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Migrations;
 using WoofWoofMaps.Bll.Extensions;
 using WoofWoofMaps.Dal;
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Services.AddDalLocationInfrastructure()
-    .AddDalRepositories()
-    .AddBll();
-
 // Add services to the container.
+
+builder.Services.AddDalUserInfrastructure();
+
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();

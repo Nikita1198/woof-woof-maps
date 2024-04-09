@@ -2,7 +2,7 @@
 using System.ComponentModel.DataAnnotations;
 using System.Text.Json.Serialization;
 
-namespace WoofWoofMaps.Dal.Entities;
+namespace WoofWoofMaps.Dal.Entities.Location;
 
 public class GeoPoint
 {

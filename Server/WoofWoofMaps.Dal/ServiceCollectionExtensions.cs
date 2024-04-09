@@ -1,29 +1,39 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using WoofWoofMaps.Dal.Entities.User;
 using WoofWoofMaps.Dal.Repositories;
 using WoofWoofMaps.Dal.Repositories.Interfaces;
-using WoofWoofMaps.Dal.Settings;
 
 namespace WoofWoofMaps.Dal;
 
 public static class ServiceCollectionExtensions
 {
-    public static IServiceCollection AddDalInfrastructure(
+    public static IServiceCollection AddDalLocationInfrastructure(
         this IServiceCollection services)
     {
-        services.AddDbContext<GeoTrackingContext>(options =>
+        return services.AddDbContext<GeoTrackingContext>(options =>
+        {
+            options.UseNpgsql(GetPosgresConnectionString());
+        });
+    }
+
+    public static IServiceCollection AddDalUserInfrastructure(
+    this IServiceCollection services)
+    {
+         services.AddDbContext<ApplicationUserContext>(options =>
         {
             options.UseNpgsql(GetPosgresConnectionString());
         });
 
+        services.AddIdentity<ApplicationUser, IdentityRole>(options =>
+        {
+            options.SignIn.RequireConfirmedEmail = false;
+            options.SignIn.RequireConfirmedPhoneNumber = false;
+        })
+        .AddEntityFrameworkStores<ApplicationUserContext>();
         return services;
-
     }
 
     public static string GetPosgresConnectionString()
@@ -34,7 +44,7 @@ public static class ServiceCollectionExtensions
 
         IConfigurationRoot configuration = builder.Build();
 
-        return configuration["ConnectionStrings:WoofWoofMaps"] 
+        return configuration["ConnectionStrings:WoofWoofMaps"]
             ?? throw new Exception("Missing сonnection string in configuration for project WoofWoofMaps");
 
     }

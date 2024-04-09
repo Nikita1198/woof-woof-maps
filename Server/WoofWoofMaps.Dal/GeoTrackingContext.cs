@@ -1,5 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using WoofWoofMaps.Dal.Entities;
+using WoofWoofMaps.Dal.Entities.Location;
 
 namespace WoofWoofMaps.Dal;
 

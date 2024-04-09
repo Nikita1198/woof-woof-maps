@@ -28,7 +28,7 @@ internal static class Configurator
         Host.CreateDefaultBuilder(args)
             .ConfigureServices((_, services) =>
             {
-                services.AddDalInfrastructure();
+                services.AddDalLocationInfrastructure();
                 services.AddDalRepositories();
                 services.AddBll();
                 services.AddScoped<MessageHandler>();

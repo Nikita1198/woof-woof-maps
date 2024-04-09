@@ -1,16 +1,16 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using WoofWoofMaps.Api.Models;
-using WoofWoofMaps.Api.Requests;
-using WoofWoofMaps.Api.Responses;
+using WoofWoofMaps.ApiLocation.Models;
 using WoofWoofMaps.Dal.Entities;
 using WoofWoofMaps.Dal.Repositories.Interfaces;
 using WoofWoofMaps.Bll;
 using WoofWoofMaps.Bll.Models;
 using WoofWoofMaps.Bll.Services.Interfaces;
+using WoofWoofMaps.ApiLocation.Requests;
+using WoofWoofMaps.ApiLocation.Responses;
 
 
-namespace WoofWoofMaps.Api.Contollers;
+namespace WoofWoofMaps.ApiLocation.Contollers;
 
 [Route("api/[controller]/[action]")]
 [ApiController]
@@ -36,7 +36,7 @@ public class PointsRouteController : Controller
                                   Longitude: request.Longitude,
                                   Timestamp: request.Timestamp),
             routeId: request.RouteId);
-        
+
         return Ok();
     }
 
@@ -49,7 +49,7 @@ public class PointsRouteController : Controller
         }
         var id = _pointsRouteService.CreateRoute(Route.Name);
 
-        return Ok( new { id });
+        return Ok(new { id });
     }
 
     [HttpGet]

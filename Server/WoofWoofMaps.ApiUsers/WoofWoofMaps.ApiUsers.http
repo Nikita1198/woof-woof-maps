@@ -1,0 +1,6 @@
+@WoofWoofMaps.ApiUsers_HostAddress = http://localhost:5047
+
+GET {{WoofWoofMaps.ApiUsers_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###

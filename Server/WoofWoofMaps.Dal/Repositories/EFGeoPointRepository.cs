@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using WoofWoofMaps.Dal;
 using WoofWoofMaps.Dal.Entities;
+using WoofWoofMaps.Dal.Entities.Location;
 using WoofWoofMaps.Dal.Repositories.Interfaces;
 
 namespace WoofWoofMaps.Dal.Repositories;

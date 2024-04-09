@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace WoofWoofMaps.Api.Models;
+namespace WoofWoofMaps.ApiLocation.Models;
 
 public record Point
 {

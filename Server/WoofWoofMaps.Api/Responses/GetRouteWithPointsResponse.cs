@@ -1,5 +1,5 @@
-﻿using WoofWoofMaps.Api.Models;
+﻿using WoofWoofMaps.ApiLocation.Models;
 
-namespace WoofWoofMaps.Api.Responses;
+namespace WoofWoofMaps.ApiLocation.Responses;
 
 public record GetRouteWithPointsResponse(long RouteId, Point[] Points);
