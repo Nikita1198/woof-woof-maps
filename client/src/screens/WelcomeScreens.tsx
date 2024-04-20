@@ -1,10 +1,11 @@
-import { Icon56MessageReadOutline } from "@vkontakte/icons";
 import {
   Avatar,
   Button,
+  ButtonGroup,
   Group,
   PanelHeader,
   PanelHeaderBack,
+  PanelHeaderClose,
   Placeholder,
   Separator,
 } from "@vkontakte/vkui";
@@ -12,11 +13,17 @@ import { Panel } from "@vkontakte/vkui/dist/components/Panel/Panel";
 import { View } from "@vkontakte/vkui/dist/components/View/View";
 import React from "react";
 import { useWebApp } from "@vkruglikov/react-telegram-web-app";
+import { YMaps, Map } from "@pbe/react-yandex-maps";
 
 const MainScreens = () => {
   const [activePanel, setActivePanel] = React.useState("panel1");
 
   const WebApp = useWebApp();
+
+  const mapState = {
+    center: [47.2313, 39.7233],
+    zoom: 15,
+  };
 
   const openBotLinkAndSendCommand = () => {
     const command = "/starBtroadcasting";
@@ -81,9 +88,18 @@ const MainScreens = () => {
             }
             header="Готовы выгуливать?"
             action={
-              <Button size="m" onClick={openBotLinkAndSendCommand}>
-                Перейти к боту
-              </Button>
+              <ButtonGroup mode="horizontal" gap="m" stretched>
+                <Button size="m" onClick={openBotLinkAndSendCommand}>
+                  Перейти к боту
+                </Button>
+                <Button
+                  size="m"
+                  mode="secondary"
+                  onClick={() => setActivePanel("panel3")}
+                >
+                  К Картам
+                </Button>
+              </ButtonGroup>
             }
           >
             Нажмите, чтобы перейти к боту и поделиться вашей геопозицией.
@@ -92,21 +108,17 @@ const MainScreens = () => {
       </Panel>
 
       <Panel id={"panel3"}>
-        <PanelHeader after={<Avatar size={36} />}>Panel 3</PanelHeader>
-        <Group>
-          <Placeholder
-            icon={<Icon56MessageReadOutline />}
-            action={
-              <Button size="m" mode="tertiary">
-                Показать все сообщения
-              </Button>
-            }
-          >
-            Нет непрочитанных
-            <br />
-            сообщений
-          </Placeholder>
-        </Group>
+        <PanelHeader
+          before={<PanelHeaderClose onClick={() => setActivePanel("panel2")} />}
+          after={<Avatar size={36} />}
+        >
+          Карты
+        </PanelHeader>
+        <YMaps>
+          <div style={{ height: "100vh", width: "100vw" }}>
+            <Map state={mapState} width="100%" height="100%" />
+          </div>
+        </YMaps>
       </Panel>
     </View>
   );
