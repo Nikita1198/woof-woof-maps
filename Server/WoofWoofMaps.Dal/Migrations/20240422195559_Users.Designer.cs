@@ -2,18 +2,21 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using WoofWoofMaps.Dal;
 
 #nullable disable
 
-namespace WoofWoofMaps.Dal.Migrations.ApplicationUser
+namespace WoofWoofMaps.Dal.Migrations
 {
-    [DbContext(typeof(ApplicationUserContext))]
-    partial class ApplicationUserContextModelSnapshot : ModelSnapshot
+    [DbContext(typeof(GeoTrackingContext))]
+    [Migration("20240422195559_Users")]
+    partial class Users
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -154,6 +157,60 @@ namespace WoofWoofMaps.Dal.Migrations.ApplicationUser
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
+            modelBuilder.Entity("WoofWoofMaps.Dal.Entities.Location.GeoPoint", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("Id"));
+
+                    b.Property<double>("Latitude")
+                        .HasColumnType("double precision");
+
+                    b.Property<double>("Longitude")
+                        .HasColumnType("double precision");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("GeoPoints");
+                });
+
+            modelBuilder.Entity("WoofWoofMaps.Dal.Entities.Location.GeoRoute", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("Id"));
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("GeoRoutes");
+                });
+
+            modelBuilder.Entity("WoofWoofMaps.Dal.Entities.Location.GeoRoutePoint", b =>
+                {
+                    b.Property<long>("GeoPointId")
+                        .HasColumnType("bigint");
+
+                    b.Property<long>("GeoRouteId")
+                        .HasColumnType("bigint");
+
+                    b.Property<DateTime>("Timestamp")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.HasKey("GeoPointId", "GeoRouteId", "Timestamp");
+
+                    b.HasIndex("GeoRouteId");
+
+                    b.ToTable("GeoRoutePoints");
+                });
+
             modelBuilder.Entity("WoofWoofMaps.Dal.Entities.Profiles.PetOwnerProfile", b =>
                 {
                     b.Property<long>("Id")
@@ -201,6 +258,21 @@ namespace WoofWoofMaps.Dal.Migrations.ApplicationUser
                         .IsUnique();
 
                     b.ToTable("WalkerProfiles");
+                });
+
+            modelBuilder.Entity("WoofWoofMaps.Dal.Entities.Profiles.WalkerRoute", b =>
+                {
+                    b.Property<long>("WalkerProfileId")
+                        .HasColumnType("bigint");
+
+                    b.Property<long>("GeoRouteId")
+                        .HasColumnType("bigint");
+
+                    b.HasKey("WalkerProfileId", "GeoRouteId");
+
+                    b.HasIndex("GeoRouteId");
+
+                    b.ToTable("WalkerRoutes");
                 });
 
             modelBuilder.Entity("WoofWoofMaps.Dal.Entities.User.ApplicationUser", b =>
@@ -329,6 +401,25 @@ namespace WoofWoofMaps.Dal.Migrations.ApplicationUser
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("WoofWoofMaps.Dal.Entities.Location.GeoRoutePoint", b =>
+                {
+                    b.HasOne("WoofWoofMaps.Dal.Entities.Location.GeoPoint", "GeoPoint")
+                        .WithMany("GeoRoutePoints")
+                        .HasForeignKey("GeoPointId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("WoofWoofMaps.Dal.Entities.Location.GeoRoute", "GeoRoute")
+                        .WithMany("GeoRoutePoints")
+                        .HasForeignKey("GeoRouteId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("GeoPoint");
+
+                    b.Navigation("GeoRoute");
+                });
+
             modelBuilder.Entity("WoofWoofMaps.Dal.Entities.Profiles.PetOwnerProfile", b =>
                 {
                     b.HasOne("WoofWoofMaps.Dal.Entities.User.ApplicationUser", "User")
@@ -349,6 +440,42 @@ namespace WoofWoofMaps.Dal.Migrations.ApplicationUser
                         .IsRequired();
 
                     b.Navigation("User");
+                });
+
+            modelBuilder.Entity("WoofWoofMaps.Dal.Entities.Profiles.WalkerRoute", b =>
+                {
+                    b.HasOne("WoofWoofMaps.Dal.Entities.Location.GeoRoute", "GeoRoute")
+                        .WithMany("WalkerRoutes")
+                        .HasForeignKey("GeoRouteId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("WoofWoofMaps.Dal.Entities.Profiles.WalkerProfile", "WalkerProfile")
+                        .WithMany("WalkerRoutes")
+                        .HasForeignKey("WalkerProfileId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("GeoRoute");
+
+                    b.Navigation("WalkerProfile");
+                });
+
+            modelBuilder.Entity("WoofWoofMaps.Dal.Entities.Location.GeoPoint", b =>
+                {
+                    b.Navigation("GeoRoutePoints");
+                });
+
+            modelBuilder.Entity("WoofWoofMaps.Dal.Entities.Location.GeoRoute", b =>
+                {
+                    b.Navigation("GeoRoutePoints");
+
+                    b.Navigation("WalkerRoutes");
+                });
+
+            modelBuilder.Entity("WoofWoofMaps.Dal.Entities.Profiles.WalkerProfile", b =>
+                {
+                    b.Navigation("WalkerRoutes");
                 });
 
             modelBuilder.Entity("WoofWoofMaps.Dal.Entities.User.ApplicationUser", b =>

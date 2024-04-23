@@ -4,10 +4,10 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 #nullable disable
 
-namespace WoofWoofMaps.Dal.Migrations.ApplicationUser
+namespace WoofWoofMaps.Dal.Migrations
 {
     /// <inheritdoc />
-    public partial class InitialIdentity : Migration
+    public partial class Users : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -201,6 +201,30 @@ namespace WoofWoofMaps.Dal.Migrations.ApplicationUser
                         onDelete: ReferentialAction.Cascade);
                 });
 
+            migrationBuilder.CreateTable(
+                name: "WalkerRoutes",
+                columns: table => new
+                {
+                    WalkerProfileId = table.Column<long>(type: "bigint", nullable: false),
+                    GeoRouteId = table.Column<long>(type: "bigint", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_WalkerRoutes", x => new { x.WalkerProfileId, x.GeoRouteId });
+                    table.ForeignKey(
+                        name: "FK_WalkerRoutes_GeoRoutes_GeoRouteId",
+                        column: x => x.GeoRouteId,
+                        principalTable: "GeoRoutes",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_WalkerRoutes_WalkerProfiles_WalkerProfileId",
+                        column: x => x.WalkerProfileId,
+                        principalTable: "WalkerProfiles",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetRoleClaims_RoleId",
                 table: "AspNetRoleClaims",
@@ -249,6 +273,11 @@ namespace WoofWoofMaps.Dal.Migrations.ApplicationUser
                 table: "WalkerProfiles",
                 column: "UserId",
                 unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_WalkerRoutes_GeoRouteId",
+                table: "WalkerRoutes",
+                column: "GeoRouteId");
         }
 
         /// <inheritdoc />
@@ -273,10 +302,13 @@ namespace WoofWoofMaps.Dal.Migrations.ApplicationUser
                 name: "PetOwnerProfiles");
 
             migrationBuilder.DropTable(
-                name: "WalkerProfiles");
+                name: "WalkerRoutes");
 
             migrationBuilder.DropTable(
                 name: "AspNetRoles");
+
+            migrationBuilder.DropTable(
+                name: "WalkerProfiles");
 
             migrationBuilder.DropTable(
                 name: "AspNetUsers");

@@ -22,7 +22,7 @@ public static class ServiceCollectionExtensions
     public static IServiceCollection AddDalUserInfrastructure(
     this IServiceCollection services)
     {
-         services.AddDbContext<ApplicationUserContext>(options =>
+         services.AddDbContext<GeoTrackingContext>(options =>
         {
             options.UseNpgsql(GetPosgresConnectionString());
         });
@@ -32,7 +32,7 @@ public static class ServiceCollectionExtensions
             options.SignIn.RequireConfirmedEmail = false;
             options.SignIn.RequireConfirmedPhoneNumber = false;
         })
-        .AddEntityFrameworkStores<ApplicationUserContext>();
+        .AddEntityFrameworkStores<GeoTrackingContext>();
         return services;
     }
 

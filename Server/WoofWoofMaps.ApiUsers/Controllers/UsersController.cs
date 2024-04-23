@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using WoofWoofMaps.ApiUsers.Models;
 using WoofWoofMaps.Dal.Entities.User;
 
 namespace WoofWoofMaps.ApiUsers.Controllers;
@@ -15,7 +16,6 @@ public class UsersController : ControllerBase
         _userManager = userManager;
     }
 
-    // GET: api/Users
     [HttpGet]
     public async Task<ActionResult<IEnumerable<ApplicationUser>>> GetUsers()
     {
@@ -23,7 +23,6 @@ public class UsersController : ControllerBase
         return Ok(users);
     }
 
-    // GET: api/Users/5
     [HttpGet("{id}")]
     public async Task<ActionResult<ApplicationUser>> GetUser(string id)
     {
@@ -37,7 +36,6 @@ public class UsersController : ControllerBase
         return user;
     }
 
-    // POST: api/Users
     [HttpPost]
     public async Task<ActionResult<ApplicationUser>> CreateUser([FromBody] RegisterModel model)
     {
@@ -59,7 +57,6 @@ public class UsersController : ControllerBase
         }
     }
 
-    // PUT: api/Users/5
     [HttpPut("{id}")]
     public async Task<IActionResult> UpdateUser(string id, [FromBody] UpdateModel model)
     {
@@ -83,7 +80,6 @@ public class UsersController : ControllerBase
         }
     }
 
-    // DELETE: api/Users/5
     [HttpDelete("{id}")]
     public async Task<IActionResult> DeleteUser(string id)
     {
@@ -102,20 +98,5 @@ public class UsersController : ControllerBase
         {
             return BadRequest(result.Errors);
         }
-    }
-
-    public class RegisterModel
-    {
-        public string UserName { get; set; }
-        public string FirstName { get; set; }
-        public string LastName { get; set; }
-        public string Email { get; set; }
-        public string Password { get; set; }
-    }
-
-    public class UpdateModel
-    {
-        public string Email { get; set; }
-        // Добавьте другие свойства, которые могут быть обновлены
     }
 }
