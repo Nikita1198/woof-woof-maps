@@ -194,7 +194,7 @@ const MainScreens = () => {
         };
       });
       setTimers(newTimers);
-    }, 1000);
+    }, 0);
 
     return () => clearInterval(interval);
   }, [timers, cards]);
@@ -303,7 +303,7 @@ const MainScreens = () => {
                   Коэффициент: {selectedCard.details.коэффициент}
                 </SimpleCell>
               </Group>
-              <Group style={{ marginBottom: 70 }}>
+              <Group style={{ marginBottom: 100 }}>
                 <MiniInfoCell
                   onClick={() => handleOpenLink("https://www.google.com")}
                 >
