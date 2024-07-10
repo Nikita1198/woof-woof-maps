@@ -7,10 +7,10 @@ import {
   Button,
   SimpleCell,
   List,
-  CellButton,
   ScreenSpinner,
   SplitLayout,
   PanelHeaderContent,
+  MiniInfoCell,
 } from "@vkontakte/vkui";
 import { Panel } from "@vkontakte/vkui/dist/components/Panel/Panel";
 import { View } from "@vkontakte/vkui/dist/components/View/View";
@@ -195,6 +195,10 @@ const MainScreens = () => {
     setActivePanel("panel2");
   };
 
+  const handleOpenLink = (url) => {
+    window.open(url, "_blank");
+  };
+
   ////////////////////////////////
   // Timer update effect
   ////////////////////////////////
@@ -272,7 +276,11 @@ const MainScreens = () => {
                 }
                 after={
                   <div style={{ display: "flex", gap: "8px" }}>
-                    <Button size="s" appearance="positive">
+                    <Button
+                      size="s"
+                      appearance="positive"
+                      onClick={setDoneScreenSpinner}
+                    >
                       Нормальный
                     </Button>
                     <Button
@@ -317,7 +325,21 @@ const MainScreens = () => {
                 </List>
               </Group>
               <Group>
-                <CellButton>Лишить права</CellButton>
+                <MiniInfoCell
+                  onClick={() => handleOpenLink("https://www.google.com")}
+                >
+                  ЮзерПрофайл
+                </MiniInfoCell>
+                <MiniInfoCell
+                  onClick={() => handleOpenLink("https://www.google.com")}
+                >
+                  БэкОфис
+                </MiniInfoCell>
+                <MiniInfoCell
+                  onClick={() => handleOpenLink("https://www.google.com")}
+                >
+                  Графана
+                </MiniInfoCell>
               </Group>
             </>
           )}
