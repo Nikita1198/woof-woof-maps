@@ -202,7 +202,7 @@ const MainScreens = () => {
   useEffect(() => {
     setTimeout(() => {
       setLoading(false);
-    }, 2000);
+    }, 0);
   }, []);
 
   const getTimerColor = (elapsedMinutes) => {
@@ -273,23 +273,6 @@ const MainScreens = () => {
                 before={
                   <PanelHeaderBack onClick={() => setActivePanel("panel1")} />
                 }
-                after={
-                  timers[selectedCard.id] ? (
-                    <div
-                      style={{
-                        textAlign: "left",
-                        marginRight: "10px",
-                        color: getTimerColor(
-                          parseInt(timers[selectedCard.id].minutes)
-                        ),
-                      }}
-                    >
-                      {`${timers[selectedCard.id].hours}:${
-                        timers[selectedCard.id].minutes
-                      }:${timers[selectedCard.id].seconds}`}
-                    </div>
-                  ) : null
-                }
               >
                 <PanelHeaderContent status={selectedCard.description}>
                   {selectedCard.title}
@@ -339,7 +322,22 @@ const MainScreens = () => {
               </Group>
               <FixedLayout filled vertical="bottom">
                 <Separator wide />
-                <Group style={{ padding: 10 }}>
+                <Group style={{ padding: 10, paddingBottom: 20 }}>
+                  {timers[selectedCard.id] ? (
+                    <div
+                      style={{
+                        paddingBottom: 10,
+                        textAlign: "center",
+                        color: getTimerColor(
+                          parseInt(timers[selectedCard.id].minutes)
+                        ),
+                      }}
+                    >
+                      {`${timers[selectedCard.id].hours}:${
+                        timers[selectedCard.id].minutes
+                      }:${timers[selectedCard.id].seconds}`}
+                    </div>
+                  ) : null}
                   <ButtonGroup
                     mode="horizontal"
                     gap="m"
