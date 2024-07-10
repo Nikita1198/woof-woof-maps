@@ -6,26 +6,30 @@ import {
   PanelHeaderBack,
   Button,
   SimpleCell,
-  List,
   ScreenSpinner,
   SplitLayout,
   PanelHeaderContent,
   MiniInfoCell,
+  ButtonGroup,
+  FixedLayout,
+  Separator,
+  Spacing,
+  Skeleton,
 } from "@vkontakte/vkui";
 import { Panel } from "@vkontakte/vkui/dist/components/Panel/Panel";
 import { View } from "@vkontakte/vkui/dist/components/View/View";
 import { useEffect, useState } from "react";
 //import { useWebApp } from "@vkruglikov/react-telegram-web-app";
 
-// Функция для генерации случайного времени регистрации в пределах 2-15 минут назад
+// Function to generate a random registration time within 1-10 minutes ago
 const getRandomRegistrationTime = () => {
   const now = new Date();
-  const minutesAgo = Math.floor(Math.random() * 14) + 2; // от 2 до 15 минут
+  const minutesAgo = Math.floor(Math.random() * 9); // from 1 to 10 minutes
   const randomTime = new Date(now.getTime() - minutesAgo * 60 * 1000);
   return randomTime.toISOString();
 };
 
-// Пример данных карточек
+// Sample card data
 const initialCards = [
   {
     id: 1,
@@ -129,57 +133,6 @@ const initialCards = [
       коэффициент: "1.5",
     },
   },
-  {
-    id: 7,
-    title: "Антифрод 78495163 Ставка 120k",
-    description: "Ставка 120k 07-08 10:30",
-    details: {
-      номер_счета: "78495163",
-      статус: "Критический",
-      рейтинг: "93",
-      что_произошло: "Ставка 120k",
-      купон: "1452502700",
-      регистрация: getRandomRegistrationTime(),
-      расчет: "2024-07-08 11:00:00",
-      ставка: "120000",
-      выигрыш: "180000",
-      коэффициент: "1.5",
-    },
-  },
-  {
-    id: 8,
-    title: "Антифрод 89574236 Ставка 90k",
-    description: "Ставка 90k 07-08 09:45",
-    details: {
-      номер_счета: "89574236",
-      статус: "Обычный",
-      рейтинг: "88",
-      что_произошло: "Ставка 90k",
-      купон: "1452502710",
-      регистрация: getRandomRegistrationTime(),
-      расчет: "2024-07-08 10:15:00",
-      ставка: "90000",
-      выигрыш: "135000",
-      коэффициент: "1.5",
-    },
-  },
-  {
-    id: 9,
-    title: "Антифрод 91265347 Ставка 60k",
-    description: "Ставка 60k 07-08 08:30",
-    details: {
-      номер_счета: "91265347",
-      статус: "Высокий",
-      рейтинг: "90",
-      что_произошло: "Ставка 60k",
-      купон: "1452502720",
-      регистрация: getRandomRegistrationTime(),
-      расчет: "2024-07-08 09:00:00",
-      ставка: "60000",
-      выигрыш: "90000",
-      коэффициент: "1.5",
-    },
-  },
 ];
 
 const MainScreens = () => {
@@ -187,6 +140,7 @@ const MainScreens = () => {
   const [activePanel, setActivePanel] = useState("panel1");
   const [selectedCard, setSelectedCard] = useState(null);
   const [timers, setTimers] = useState({});
+  const [loading, setLoading] = useState(true);
 
   //const WebApp = useWebApp();
 
@@ -228,9 +182,15 @@ const MainScreens = () => {
         const elapsedTime = currentTime - registrationTime;
 
         newTimers[card.id] = {
-          hours: Math.floor((elapsedTime / (1000 * 60 * 60)) % 24),
-          minutes: Math.floor((elapsedTime / (1000 * 60)) % 60),
-          seconds: Math.floor((elapsedTime / 1000) % 60),
+          hours: Math.floor((elapsedTime / (1000 * 60 * 60)) % 24)
+            .toString()
+            .padStart(2, "0"),
+          minutes: Math.floor((elapsedTime / (1000 * 60)) % 60)
+            .toString()
+            .padStart(2, "0"),
+          seconds: Math.floor((elapsedTime / 1000) % 60)
+            .toString()
+            .padStart(2, "0"),
         };
       });
       setTimers(newTimers);
@@ -239,31 +199,70 @@ const MainScreens = () => {
     return () => clearInterval(interval);
   }, [timers, cards]);
 
+  useEffect(() => {
+    setTimeout(() => {
+      setLoading(false);
+    }, 2000);
+  }, []);
+
+  const getTimerColor = (elapsedMinutes) => {
+    if (elapsedMinutes < 3) {
+      return "green";
+    } else if (elapsedMinutes < 6) {
+      return "orange";
+    } else {
+      return "red";
+    }
+  };
+
   return (
     <SplitLayout popout={popout} aria-live="polite" aria-busy={!!popout}>
       <View activePanel={activePanel}>
         <Panel id="panel1">
           <PanelHeader>Эксцеденты</PanelHeader>
           <Group>
-            {cards.map((card) => (
-              <Cell
-                key={card.id}
-                expandable="auto"
-                before={<Icon28UserOutline />}
-                onClick={() => handleCardClick(card)}
-                after={
-                  <div style={{ textAlign: "left" }}>
-                    {timers[card.id]
-                      ? `${timers[card.id].hours}:${timers[card.id].minutes}:${
-                          timers[card.id].seconds
-                        }`
-                      : "0:0:0"}
-                  </div>
-                }
-              >
-                {card.title}
-              </Cell>
-            ))}
+            {loading ? (
+              <>
+                {cards.map((card) => (
+                  <Cell key={card.id} expandable="auto">
+                    <Skeleton key={card.id} width="100%" />
+                  </Cell>
+                ))}
+              </>
+            ) : (
+              cards.map((card) => (
+                <Cell
+                  key={card.id}
+                  expandable="auto"
+                  before={
+                    <Icon28UserOutline
+                    // color={getTimerColor(
+                    //   timers[card.id] ? timers[card.id].minutes : 0
+                    // )}
+                    />
+                  }
+                  onClick={() => handleCardClick(card)}
+                  after={
+                    <div
+                      style={{
+                        textAlign: "left",
+                        color: getTimerColor(
+                          timers[card.id] ? timers[card.id].minutes : 0
+                        ),
+                      }}
+                    >
+                      {timers[card.id]
+                        ? `${timers[card.id].hours}:${
+                            timers[card.id].minutes
+                          }:${timers[card.id].seconds}`
+                        : "00:00:00"}
+                    </div>
+                  }
+                >
+                  {card.title}
+                </Cell>
+              ))
+            )}
           </Group>
         </Panel>
         <Panel id="panel2">
@@ -275,22 +274,21 @@ const MainScreens = () => {
                   <PanelHeaderBack onClick={() => setActivePanel("panel1")} />
                 }
                 after={
-                  <div style={{ display: "flex", gap: "8px" }}>
-                    <Button
-                      size="s"
-                      appearance="positive"
-                      onClick={setDoneScreenSpinner}
+                  timers[selectedCard.id] ? (
+                    <div
+                      style={{
+                        textAlign: "left",
+                        marginRight: "10px",
+                        color: getTimerColor(
+                          parseInt(timers[selectedCard.id].minutes)
+                        ),
+                      }}
                     >
-                      Нормальный
-                    </Button>
-                    <Button
-                      size="s"
-                      appearance="negative"
-                      onClick={setDoneScreenSpinner}
-                    >
-                      Бх
-                    </Button>
-                  </div>
+                      {`${timers[selectedCard.id].hours}:${
+                        timers[selectedCard.id].minutes
+                      }:${timers[selectedCard.id].seconds}`}
+                    </div>
+                  ) : null
                 }
               >
                 <PanelHeaderContent status={selectedCard.description}>
@@ -298,33 +296,31 @@ const MainScreens = () => {
                 </PanelHeaderContent>
               </PanelHeader>
               <Group>
-                <List>
-                  <SimpleCell>Описание: {selectedCard.description}</SimpleCell>
-                  <SimpleCell>
-                    Номер счета: {selectedCard.details.номер_счета}
-                  </SimpleCell>
-                  <SimpleCell>Статус: {selectedCard.details.статус}</SimpleCell>
-                  <SimpleCell>
-                    Рейтинг: {selectedCard.details.рейтинг}
-                  </SimpleCell>
-                  <SimpleCell>
-                    Что произошло: {selectedCard.details.что_произошло}
-                  </SimpleCell>
-                  <SimpleCell>Купон: {selectedCard.details.купон}</SimpleCell>
-                  <SimpleCell>
-                    Регистрация: {selectedCard.details.регистрация}
-                  </SimpleCell>
-                  <SimpleCell>Расчет: {selectedCard.details.расчет}</SimpleCell>
-                  <SimpleCell>Ставка: {selectedCard.details.ставка}</SimpleCell>
-                  <SimpleCell>
-                    Выигрыш: {selectedCard.details.выигрыш}
-                  </SimpleCell>
-                  <SimpleCell>
-                    Коэффициент: {selectedCard.details.коэффициент}
-                  </SimpleCell>
-                </List>
+                <SimpleCell>
+                  Описание: {selectedCard.description}
+                  <Spacing size={13} />
+                  Номер счета: {selectedCard.details.номер_счета}
+                  <Spacing size={13} />
+                  Статус: {selectedCard.details.статус}
+                  <Spacing size={13} />
+                  Рейтинг: {selectedCard.details.рейтинг}
+                  <Spacing size={13} />
+                  Что произошло: {selectedCard.details.что_произошло}
+                  <Spacing size={13} />
+                  Купон: {selectedCard.details.купон}
+                  <Spacing size={13} />
+                  Регистрация: {selectedCard.details.регистрация}
+                  <Spacing size={13} />
+                  Расчет: {selectedCard.details.расчет}
+                  <Spacing size={13} />
+                  Ставка: {selectedCard.details.ставка}
+                  <Spacing size={13} />
+                  Выигрыш: {selectedCard.details.выигрыш}
+                  <Spacing size={13} />
+                  Коэффициент: {selectedCard.details.коэффициент}
+                </SimpleCell>
               </Group>
-              <Group>
+              <Group style={{ marginBottom: 70 }}>
                 <MiniInfoCell
                   onClick={() => handleOpenLink("https://www.google.com")}
                 >
@@ -341,6 +337,34 @@ const MainScreens = () => {
                   Графана
                 </MiniInfoCell>
               </Group>
+              <FixedLayout filled vertical="bottom">
+                <Separator wide />
+                <Group style={{ padding: 10 }}>
+                  <ButtonGroup
+                    mode="horizontal"
+                    gap="m"
+                    stretched
+                    align="center"
+                  >
+                    <Button
+                      onClick={setDoneScreenSpinner}
+                      size="l"
+                      appearance="negative"
+                      stretched
+                    >
+                      БХ
+                    </Button>
+                    <Button
+                      onClick={setDoneScreenSpinner}
+                      size="l"
+                      appearance="positive"
+                      stretched
+                    >
+                      Нормальный
+                    </Button>
+                  </ButtonGroup>
+                </Group>
+              </FixedLayout>
             </>
           )}
         </Panel>
