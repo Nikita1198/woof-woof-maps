@@ -14,8 +14,8 @@ import {
 } from "@vkontakte/vkui";
 import { Panel } from "@vkontakte/vkui/dist/components/Panel/Panel";
 import { View } from "@vkontakte/vkui/dist/components/View/View";
-import React, { useEffect, useState } from "react";
-import { useWebApp } from "@vkruglikov/react-telegram-web-app";
+import { useEffect, useState } from "react";
+//import { useWebApp } from "@vkruglikov/react-telegram-web-app";
 
 // Пример данных карточек
 const initialCards = [
@@ -180,7 +180,7 @@ const MainScreens = () => {
   const [selectedCard, setSelectedCard] = useState(null);
   const [timers, setTimers] = useState({});
 
-  const WebApp = useWebApp();
+  //const WebApp = useWebApp();
 
   const handleCardClick = (card) => {
     setSelectedCard(card);
@@ -193,11 +193,6 @@ const MainScreens = () => {
   const [popout, setPopout] = useState(null);
 
   const clearPopout = () => setPopout(null);
-
-  const setLoadingScreenSpinner = () => {
-    setPopout(<ScreenSpinner state="loading" />);
-    setTimeout(clearPopout, 3000);
-  };
 
   const setDoneScreenSpinner = () => {
     setPopout(<ScreenSpinner state="loading" />);
@@ -230,7 +225,7 @@ const MainScreens = () => {
     }, 1000);
 
     return () => clearInterval(interval);
-  }, [timers]);
+  }, [timers, cards]);
 
   return (
     <SplitLayout popout={popout} aria-live="polite" aria-busy={!!popout}>
