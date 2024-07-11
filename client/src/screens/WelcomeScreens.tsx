@@ -18,6 +18,7 @@ import {
 } from "@vkontakte/vkui";
 import { Panel } from "@vkontakte/vkui/dist/components/Panel/Panel";
 import { View } from "@vkontakte/vkui/dist/components/View/View";
+import { useWebApp } from "@vkruglikov/react-telegram-web-app";
 import { useEffect, useState } from "react";
 //import { useWebApp } from "@vkruglikov/react-telegram-web-app";
 
@@ -141,8 +142,10 @@ const MainScreens = () => {
   const [selectedCard, setSelectedCard] = useState(null);
   const [timers, setTimers] = useState({});
   const [loading, setLoading] = useState(true);
+  const [userId, setUserId] = useState(null);
+  const [popout, setPopout] = useState(null);
 
-  //const WebApp = useWebApp();
+  const WebApp = useWebApp();
 
   const handleCardClick = (card) => {
     setSelectedCard(card);
@@ -152,11 +155,6 @@ const MainScreens = () => {
   const handleOpenLink = (url) => {
     window.open(url, "_blank");
   };
-
-  ////////////////////////////////
-  // Timer update effect
-  ////////////////////////////////
-  const [popout, setPopout] = useState(null);
 
   const clearPopout = () => setPopout(null);
 
@@ -199,6 +197,32 @@ const MainScreens = () => {
     return () => clearInterval(interval);
   }, [timers, cards]);
 
+  // Fetch user info effect
+  useEffect(() => {
+    const fetchUserInfo = async () => {
+      try {
+        const response = await fetch(
+          "https://your-server-url.com/api/get_user_info",
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              user_id: WebApp.initDataUnsafe.user.id,
+            }),
+          }
+        );
+        const data = await response.json();
+        setUserId(data.id); // Assuming `data.id` contains the user ID
+      } catch (error) {
+        console.error("Error fetching user info:", error);
+      }
+    };
+
+    fetchUserInfo();
+  }, []);
+
   useEffect(() => {
     setTimeout(() => {
       setLoading(false);
@@ -219,7 +243,11 @@ const MainScreens = () => {
     <SplitLayout popout={popout} aria-live="polite" aria-busy={!!popout}>
       <View activePanel={activePanel}>
         <Panel id="panel1">
-          <PanelHeader>Эксцеденты</PanelHeader>
+          <PanelHeader>
+            <PanelHeaderContent status={userId ? `MyID: ${userId}` : null}>
+              Эксцеденты
+            </PanelHeaderContent>
+          </PanelHeader>
           <Group>
             {loading ? (
               <>
