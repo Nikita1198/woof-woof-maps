@@ -251,7 +251,7 @@ const MainScreens = () => {
         <Panel id="panel1">
           <PanelHeader>
             <PanelHeaderContent status={userId ? `MyID: ${userId}` : null}>
-              Эксцеденты
+              Инциденты
             </PanelHeaderContent>
           </PanelHeader>
           <Group>
