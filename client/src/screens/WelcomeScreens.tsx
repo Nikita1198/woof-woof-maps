@@ -28,6 +28,13 @@ const getRandomRegistrationTime = () => {
   return randomTime.toISOString();
 };
 
+declare global {
+  interface Window {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    Telegram: any;
+  }
+}
+
 // Sample card data
 const initialCards = [
   {
@@ -193,30 +200,33 @@ const MainScreens = () => {
     return () => clearInterval(interval);
   }, [timers, cards]);
 
-  // Fetch user info effect
-  useEffect(() => {
-    const fetchUserInfo = async () => {
-      try {
-        const response = await fetch(
-          "https://your-server-url.com/api/get_user_info",
-          {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify({
-              user_id: window.Telegram.WebApp.initDataUnsafe.user.id,
-            }),
-          }
-        );
-        const data = await response.json();
-        setUserId(data.id); // Assuming `data.id` contains the user ID
-      } catch (error) {
-        console.error("Error fetching user info:", error);
-      }
-    };
+  // Function to fetch user info
+  const fetchUserInfo = async (userId) => {
+    try {
+      const response = await fetch(
+        "https://your-server-url.com/api/get_user_info",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ user_id: userId }),
+        }
+      );
+      const data = await response.json();
+      setUserId(data.id); // Assuming `data.id` contains the user ID
+    } catch (error) {
+      console.error("Error fetching user info:", error);
+    }
+  };
 
-    fetchUserInfo();
+  // Fetch user ID from Telegram WebApp initData
+  useEffect(() => {
+    if (window.Telegram?.WebApp?.initDataUnsafe?.user?.id) {
+      const userId = window.Telegram.WebApp.initDataUnsafe.user.id;
+      setUserId(userId);
+      fetchUserInfo(userId);
+    }
   }, []);
 
   useEffect(() => {
