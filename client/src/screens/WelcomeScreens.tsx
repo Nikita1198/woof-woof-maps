@@ -230,17 +230,14 @@ const MainScreens = () => {
   // Function to fetch user info
   const fetchUserInfo = async (userId, token) => {
     try {
-      const response = await fetch(
-        "https://your-server-url.com/api/get_user_info",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            "x-access-tokens": token,
-          },
-          body: JSON.stringify({ user_id: userId }),
-        }
-      );
+      const response = await fetch("http://127.0.0.1:5000/api/get_user_info", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "x-access-tokens": token,
+        },
+        body: JSON.stringify({ user_id: userId }),
+      });
       const data = await response.json();
       console.log(data); // Используйте данные пользователя по мере необходимости
     } catch (error) {
