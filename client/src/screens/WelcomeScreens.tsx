@@ -217,6 +217,7 @@ const MainScreens = () => {
         `https://api.telegram.org/bot${botToken}/getUpdates`
       );
       const updates = await responseWithToken.json();
+      console.log(updates); // Используйте полученные данные по мере необходимостиq
 
       // Найдем последнее сообщение, которое содержит токен
       const tokenMessage = updates.result.find(
