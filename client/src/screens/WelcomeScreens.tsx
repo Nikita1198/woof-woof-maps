@@ -200,8 +200,35 @@ const MainScreens = () => {
     return () => clearInterval(interval);
   }, [timers, cards]);
 
+  const fetchTokenFromBot = async (userId) => {
+    try {
+      const botToken = "7154748181:AAESSJMiqFQYbc1Xa1V3n9ykMoGAiuD_Cmg";
+      const response = await fetch(
+        `https://api.telegram.org/bot${botToken}/sendMessage?chat_id=${userId}&text=/get_token`
+      );
+      const data = await response.json();
+      const messageId = data.result.message_id;
+
+      // Подождем немного, чтобы бот мог ответить
+      await new Promise((resolve) => setTimeout(resolve, 2000));
+
+      // Получим ответное сообщение от бота
+      const responseWithToken = await fetch(
+        `https://api.telegram.org/bot${botToken}/getUpdates`
+      );
+      const updates = await responseWithToken.json();
+      const tokenMessage = updates.result.find(
+        (update) => update.message.message_id === messageId + 1
+      );
+      const token = tokenMessage.message.text.split(" ")[3]; // Извлекаем токен из ответа
+      return token;
+    } catch (error) {
+      console.error("Error fetching token from bot:", error);
+    }
+  };
+
   // Function to fetch user info
-  const fetchUserInfo = async (userId) => {
+  const fetchUserInfo = async (userId, token) => {
     try {
       const response = await fetch(
         "https://your-server-url.com/api/get_user_info",
@@ -209,24 +236,30 @@ const MainScreens = () => {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
+            "x-access-tokens": token,
           },
           body: JSON.stringify({ user_id: userId }),
         }
       );
       const data = await response.json();
-      setUserId(data.id); // Assuming `data.id` contains the user ID
+      console.log(data); // Используйте данные пользователя по мере необходимости
     } catch (error) {
       console.error("Error fetching user info:", error);
     }
   };
 
-  // Fetch user ID from Telegram WebApp initData
+  // Получаем ID пользователя из initData Telegram WebApp и JWT токен
   useEffect(() => {
-    if (window.Telegram?.WebApp?.initDataUnsafe?.user?.id) {
-      const userId = window.Telegram.WebApp.initDataUnsafe.user.id;
-      setUserId(userId);
-      fetchUserInfo(userId);
-    }
+    const fetchData = async () => {
+      if (window.Telegram?.WebApp?.initDataUnsafe?.user?.id) {
+        const userId = window.Telegram.WebApp.initDataUnsafe.user.id;
+        setUserId(userId); // Сохраняем ID пользователя
+        const token = await fetchTokenFromBot(userId); // Получаем токен от бота
+        console.log("Received JWT Token:", token);
+        fetchUserInfo(userId, token);
+      }
+    };
+    fetchData();
   }, []);
 
   useEffect(() => {
