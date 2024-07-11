@@ -202,32 +202,15 @@ const MainScreens = () => {
 
   const fetchTokenFromBot = async (userId) => {
     try {
-      const botToken = "7154748181:AAESSJMiqFQYbc1Xa1V3n9ykMoGAiuD_Cmg";
-      const response = await fetch(
-        `https://api.telegram.org/bot${botToken}/sendMessage?chat_id=${userId}&text=/get_token`
-      );
+      const response = await fetch("http://127.0.0.1:5000/get_token", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ user_id: userId }),
+      });
       const data = await response.json();
-      console.log(data); // Используйте полученный токен по мере необходимости
-
-      // Подождем немного, чтобы бот мог ответить
-      await new Promise((resolve) => setTimeout(resolve, 2000));
-
-      // Получим ответное сообщение от бота
-      const responseWithToken = await fetch(
-        `https://api.telegram.org/bot${botToken}/getUpdates`
-      );
-      const updates = await responseWithToken.json();
-      console.log(updates); // Используйте полученные данные по мере необходимостиq
-
-      // Найдем последнее сообщение, которое содержит токен
-      const tokenMessage = updates.result.find(
-        (update) =>
-          update.message &&
-          update.message.text &&
-          update.message.text.startsWith("Ваш JWT токен:")
-      );
-      const token = tokenMessage.message.text.split(" ")[3]; // Извлекаем токен из ответа
-      return token;
+      return data.token;
     } catch (error) {
       console.error("Error fetching token from bot:", error);
       return null;
