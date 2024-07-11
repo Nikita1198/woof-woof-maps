@@ -20,7 +20,6 @@ import { Panel } from "@vkontakte/vkui/dist/components/Panel/Panel";
 import { View } from "@vkontakte/vkui/dist/components/View/View";
 import { useWebApp } from "@vkruglikov/react-telegram-web-app";
 import { useEffect, useState } from "react";
-//import { useWebApp } from "@vkruglikov/react-telegram-web-app";
 
 // Function to generate a random registration time within 1-10 minutes ago
 const getRandomRegistrationTime = () => {
@@ -146,6 +145,7 @@ const MainScreens = () => {
   const [popout, setPopout] = useState(null);
 
   const WebApp = useWebApp();
+  console.log("WebApp ----------->", WebApp);
 
   const handleCardClick = (card) => {
     setSelectedCard(card);
