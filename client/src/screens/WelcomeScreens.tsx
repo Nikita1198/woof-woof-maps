@@ -193,50 +193,52 @@ const MainScreens = () => {
               Инциденты
             </PanelHeaderContent>
           </PanelHeader>
-          <Group>
-            {token ? (
-              cards.length !== 0 ? (
-                cards.map((card) => (
-                  <Cell
-                    key={card.id}
-                    expandable="auto"
-                    before={<Icon28UserOutline />}
-                    onClick={() => handleCardClick(card)}
-                    after={
-                      <div
-                        style={{
-                          textAlign: "left",
-                          color: getTimerColor(timers[card.id]?.minutes || 0),
-                        }}
-                      >
-                        {timers[card.id]
-                          ? `${timers[card.id].hours}:${
-                              timers[card.id].minutes
-                            }:${timers[card.id].seconds}`
-                          : "00:00:00"}
-                      </div>
+          {!loading && (
+            <Group>
+              {token ? (
+                cards.length !== 0 ? (
+                  cards.map((card) => (
+                    <Cell
+                      key={card.id}
+                      expandable="auto"
+                      before={<Icon28UserOutline />}
+                      onClick={() => handleCardClick(card)}
+                      after={
+                        <div
+                          style={{
+                            textAlign: "left",
+                            color: getTimerColor(timers[card.id]?.minutes || 0),
+                          }}
+                        >
+                          {timers[card.id]
+                            ? `${timers[card.id].hours}:${
+                                timers[card.id].minutes
+                              }:${timers[card.id].seconds}`
+                            : "00:00:00"}
+                        </div>
+                      }
+                    >
+                      {card.summary}
+                    </Cell>
+                  ))
+                ) : (
+                  <Placeholder
+                    icon={
+                      <img src="../aphrodita_logo.png" width={170} alt="Logo" />
                     }
-                  >
-                    {card.summary}
-                  </Cell>
-                ))
+                    header="Инциденты отсутствуют"
+                  />
+                )
               ) : (
                 <Placeholder
                   icon={
                     <img src="../aphrodita_logo.png" width={170} alt="Logo" />
                   }
-                  header="Инциденты отсутствуют"
+                  header="Афродита вас не знает"
                 />
-              )
-            ) : (
-              <Placeholder
-                icon={
-                  <img src="../aphrodita_logo.png" width={170} alt="Logo" />
-                }
-                header="Афродита вас не знает"
-              />
-            )}
-          </Group>
+              )}
+            </Group>
+          )}
         </Panel>
         <Panel id="panel2">
           {selectedCard && (
