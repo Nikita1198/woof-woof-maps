@@ -1,7 +1,8 @@
 {
     "rewrites": [
         {
-            "source": "/api/:path*"
+            "source": "/api/:path*",
+            "destination": "https://katya-agro.ru/api/:path*"
         }
     ],
     "headers": [
@@ -11,6 +12,10 @@
                 {
                     "key": "Access-Control-Allow-Credentials",
                     "value": "true"
+                },
+                {
+                    "key": "Access-Control-Allow-Origin",
+                    "value": "*" // This should be restricted to your frontend origin for security
                 },
                 {
                     "key": "Access-Control-Allow-Methods",
