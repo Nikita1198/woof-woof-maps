@@ -3,7 +3,6 @@ import {
   Icon24StorefrontOutline,
   Icon24UserSquareOutline,
   Icon28UserOutline,
-  Icon28WorkOutline,
 } from "@vkontakte/icons";
 import {
   Cell,
@@ -13,7 +12,6 @@ import {
   ScreenSpinner,
   SplitLayout,
   PanelHeaderContent,
-  MiniInfoCell,
   ButtonGroup,
   FixedLayout,
   Separator,
