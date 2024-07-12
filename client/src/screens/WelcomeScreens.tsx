@@ -1,4 +1,10 @@
-import { Icon28UserOutline } from "@vkontakte/icons";
+import {
+  Icon24GraphOutline,
+  Icon24StorefrontOutline,
+  Icon24UserSquareOutline,
+  Icon28UserOutline,
+  Icon28WorkOutline,
+} from "@vkontakte/icons";
 import {
   Cell,
   Group,
@@ -218,30 +224,47 @@ const MainScreens = () => {
               <Group>
                 <SimpleCell>{selectedCard.description}</SimpleCell>
               </Group>
-              <Group style={{ marginBottom: 100 }}>
-                <MiniInfoCell
-                  onClick={() => handleOpenLink("https://www.google.com")}
-                >
-                  ЮзерПрофайл
-                </MiniInfoCell>
-                <MiniInfoCell
-                  onClick={() => handleOpenLink("https://www.google.com")}
-                >
-                  Графана
-                </MiniInfoCell>
-              </Group>
               <FixedLayout filled vertical="bottom">
                 <Separator wide />
-                <Group>
-                  <ButtonGroup mode="vertical" gap="m">
-                    <Button
-                      onClick={() => handleOpenLink("https://www.google.com")}
-                      size="l"
-                      appearance="accent"
+                <Group style={{ padding: 15, paddingBottom: "1.5rem" }}>
+                  <ButtonGroup mode="vertical" gap="m" stretched>
+                    <ButtonGroup
+                      mode="horizontal"
+                      gap="m"
                       stretched
+                      align="center"
                     >
-                      БэкОфис
-                    </Button>
+                      <Button
+                        onClick={() => handleOpenLink("https://www.google.com")}
+                        size="s"
+                        appearance="accent"
+                        mode="tertiary"
+                        before={<Icon24StorefrontOutline />}
+                        stretched
+                      >
+                        БэкОфис
+                      </Button>
+                      <Button
+                        onClick={() => handleOpenLink("https://www.google.com")}
+                        size="s"
+                        appearance="accent"
+                        mode="tertiary"
+                        before={<Icon24UserSquareOutline />}
+                        stretched
+                      >
+                        ЮзерПрофайл
+                      </Button>
+                      <Button
+                        onClick={() => handleOpenLink("https://www.google.com")}
+                        size="s"
+                        appearance="accent"
+                        mode="tertiary"
+                        before={<Icon24GraphOutline />}
+                        stretched
+                      >
+                        Графана
+                      </Button>
+                    </ButtonGroup>
                     <ButtonGroup
                       mode="horizontal"
                       gap="m"
