@@ -303,7 +303,7 @@ const MainScreens = () => {
               ))
             ) : (
               <Placeholder
-                icon={<img src="../../public/aphrodita_logo.png" width={200} />}
+                icon={<img src="../aphrodita_logo.png" width={200} />}
                 header="Афродита вас не знает!"
               ></Placeholder>
             )}
