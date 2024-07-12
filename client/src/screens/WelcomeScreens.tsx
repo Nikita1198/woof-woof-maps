@@ -15,6 +15,11 @@ import {
   SimpleCell,
   Button,
 } from "@vkontakte/vkui";
+
+import TimeAgo from "react-timeago";
+import russianStrings from "react-timeago/lib/language-strings/ru";
+import buildFormatter from "react-timeago/lib/formatters/buildFormatter";
+
 import { Panel } from "@vkontakte/vkui/dist/components/Panel/Panel";
 import { View } from "@vkontakte/vkui/dist/components/View/View";
 import { useEffect, useState } from "react";
@@ -30,7 +35,6 @@ const MainScreens = () => {
   const [cards, setCards] = useState([]);
   const [activePanel, setActivePanel] = useState("panel1");
   const [selectedCard, setSelectedCard] = useState(null);
-  const [timers, setTimers] = useState({});
   const [userId, setUserId] = useState(null);
   const [token, setToken] = useState(null);
   const [popout, setPopout] = useState(null);
@@ -60,31 +64,7 @@ const MainScreens = () => {
     }, 2000);
   };
 
-  useEffect(() => {
-    const interval = setInterval(() => {
-      const newTimers = { ...timers };
-      cards.forEach((card) => {
-        const registrationTime = new Date(card.created).getTime();
-        const currentTime = new Date().getTime();
-        const elapsedTime = currentTime - registrationTime;
-
-        newTimers[card.id] = {
-          hours: Math.floor((elapsedTime / (1000 * 60 * 60)) % 24)
-            .toString()
-            .padStart(2, "0"),
-          minutes: Math.floor((elapsedTime / (1000 * 60)) % 60)
-            .toString()
-            .padStart(2, "0"),
-          seconds: Math.floor((elapsedTime / 1000) % 60)
-            .toString()
-            .padStart(2, "0"),
-        };
-      });
-      setTimers(newTimers);
-    }, 1000);
-
-    return () => clearInterval(interval);
-  }, [timers, cards]);
+  const formatter = buildFormatter(russianStrings);
 
   const fetchTokenFromBot = async (userId) => {
     try {
@@ -169,16 +149,6 @@ const MainScreens = () => {
     fetchData();
   }, []);
 
-  const getTimerColor = (elapsedMinutes) => {
-    if (elapsedMinutes < 3) {
-      return "green";
-    } else if (elapsedMinutes < 6) {
-      return "orange";
-    } else {
-      return "red";
-    }
-  };
-
   return (
     <SplitLayout
       popout={popout || (loading && <ScreenSpinner state="loading" />)}
@@ -203,18 +173,7 @@ const MainScreens = () => {
                       before={<Icon28UserOutline />}
                       onClick={() => handleCardClick(card)}
                       after={
-                        <div
-                          style={{
-                            textAlign: "left",
-                            color: getTimerColor(timers[card.id]?.minutes || 0),
-                          }}
-                        >
-                          {timers[card.id]
-                            ? `${timers[card.id].hours}:${
-                                timers[card.id].minutes
-                              }:${timers[card.id].seconds}`
-                            : "00:00:00"}
-                        </div>
+                        <TimeAgo date={card.created} formatter={formatter} />
                       }
                     >
                       {card.summary}
@@ -275,21 +234,7 @@ const MainScreens = () => {
               <FixedLayout filled vertical="bottom">
                 <Separator wide />
                 <Group style={{ padding: 10, paddingBottom: 20 }}>
-                  {timers[selectedCard.id] ? (
-                    <div
-                      style={{
-                        paddingBottom: 10,
-                        textAlign: "center",
-                        color: getTimerColor(
-                          parseInt(timers[selectedCard.id].minutes)
-                        ),
-                      }}
-                    >
-                      {`${timers[selectedCard.id].hours}:${
-                        timers[selectedCard.id].minutes
-                      }:${timers[selectedCard.id].seconds}`}
-                    </div>
-                  ) : null}
+                  {}
                   <ButtonGroup
                     mode="horizontal"
                     gap="m"
