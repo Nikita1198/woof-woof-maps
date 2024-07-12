@@ -64,7 +64,7 @@ const MainScreens = () => {
     const interval = setInterval(() => {
       const newTimers = { ...timers };
       cards.forEach((card) => {
-        const registrationTime = new Date(card.details?.регистрация).getTime();
+        const registrationTime = new Date(card.created).getTime();
         const currentTime = new Date().getTime();
         const elapsedTime = currentTime - registrationTime;
 
@@ -257,7 +257,7 @@ const MainScreens = () => {
                   <Spacing size={13} />
                   Купон: {selectedCard.details?.купон}
                   <Spacing size={13} />
-                  Регистрация: {selectedCard.details?.регистрация}
+                  Регистрация: {selectedCard.created}
                   <Spacing size={13} />
                   Расчет: {selectedCard.details?.расчет}
                   <Spacing size={13} />
