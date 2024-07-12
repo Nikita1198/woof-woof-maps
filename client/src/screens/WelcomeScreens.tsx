@@ -202,7 +202,7 @@ const MainScreens = () => {
 
   const fetchTokenFromBot = async (userId) => {
     try {
-      const response = await fetch("http://127.0.0.1:5000/get_token", {
+      const response = await fetch("http://90.156.209.225:5000/get_token", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -220,14 +220,17 @@ const MainScreens = () => {
   // Function to fetch user info
   const fetchUserInfo = async (userId, token) => {
     try {
-      const response = await fetch("http://127.0.0.1:5000/api/get_user_info", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          "x-access-tokens": token,
-        },
-        body: JSON.stringify({ user_id: userId }),
-      });
+      const response = await fetch(
+        "http://90.156.209.225:5000/api/get_user_info",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            "x-access-tokens": token,
+          },
+          body: JSON.stringify({ user_id: userId }),
+        }
+      );
       const data = await response.json();
       console.log(data); // Используйте данные пользователя по мере необходимости
     } catch (error) {
