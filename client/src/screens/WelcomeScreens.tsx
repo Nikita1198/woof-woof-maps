@@ -249,34 +249,12 @@ const MainScreens = () => {
                   <PanelHeaderBack onClick={() => setActivePanel("panel1")} />
                 }
               >
-                <PanelHeaderContent status={selectedCard.description}>
+                <PanelHeaderContent status={selectedCard.created}>
                   {selectedCard.summary}
                 </PanelHeaderContent>
               </PanelHeader>
               <Group>
-                <SimpleCell>
-                  Описание: {selectedCard.description}
-                  <Spacing size={13} />
-                  Номер счета: {selectedCard.details?.номер_счета}
-                  <Spacing size={13} />
-                  Статус: {selectedCard.status}
-                  <Spacing size={13} />
-                  Рейтинг: {selectedCard.details?.рейтинг}
-                  <Spacing size={13} />
-                  Что произошло: {selectedCard.details?.что_произошло}
-                  <Spacing size={13} />
-                  Купон: {selectedCard.details?.купон}
-                  <Spacing size={13} />
-                  Регистрация: {selectedCard.created}
-                  <Spacing size={13} />
-                  Расчет: {selectedCard.details?.расчет}
-                  <Spacing size={13} />
-                  Ставка: {selectedCard.details?.ставка}
-                  <Spacing size={13} />
-                  Выигрыш: {selectedCard.details?.выигрыш}
-                  <Spacing size={13} />
-                  Коэффициент: {selectedCard.details?.коэффициент}
-                </SimpleCell>
+                <SimpleCell>{selectedCard.description}</SimpleCell>
               </Group>
               <Group style={{ marginBottom: 100 }}>
                 <MiniInfoCell
