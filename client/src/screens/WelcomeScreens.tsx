@@ -202,16 +202,13 @@ const MainScreens = () => {
 
   const fetchTokenFromBot = async (userId) => {
     try {
-      const response = await fetch(
-        "https://api-client.katya-agro.ru/api/get_token",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({ user_id: userId }),
-        }
-      );
+      const response = await fetch("https://katya-agro.ru/api/api/get_token", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ user_id: userId }),
+      });
       const data = await response.json();
       return data.token;
     } catch (error) {
@@ -224,7 +221,7 @@ const MainScreens = () => {
   const fetchUserInfo = async (userId, token) => {
     try {
       const response = await fetch(
-        "https://api-client.katya-agro.ru/api/get_user_info",
+        "https://katya-agro.ru/api/api/get_user_info",
         {
           method: "POST",
           headers: {

@@ -1,8 +1,7 @@
 {
     "rewrites": [
         {
-            "source": "/api/:path*",
-            "destination": "https://katya-agro.ru/api/:path*"
+            "source": "/api/:path*"
         }
     ],
     "headers": [
