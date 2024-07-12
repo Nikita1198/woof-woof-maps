@@ -35,6 +35,7 @@ const MainScreens = () => {
   const [userId, setUserId] = useState(null);
   const [token, setToken] = useState(null);
   const [popout, setPopout] = useState(null);
+  const [loading, setLoading] = useState(false); // New state for loading
 
   const handleCardClick = (card) => {
     setSelectedCard(card);
@@ -126,6 +127,7 @@ const MainScreens = () => {
 
   // Function to fetch tasks
   const fetchTasks = async (token) => {
+    setLoading(true); // Set loading to true before fetching
     try {
       const response = await fetch("https://katya-agro.ru/api/api/get_tasks", {
         method: "GET",
@@ -143,6 +145,8 @@ const MainScreens = () => {
       }
     } catch (error) {
       console.error("Error fetching tasks:", error);
+    } finally {
+      setLoading(false); // Set loading to false after fetching
     }
   };
 
@@ -177,7 +181,11 @@ const MainScreens = () => {
   };
 
   return (
-    <SplitLayout popout={popout} aria-live="polite" aria-busy={!!popout}>
+    <SplitLayout
+      popout={popout || (loading && <ScreenSpinner state="loading" />)}
+      aria-live="polite"
+      aria-busy={!!popout || loading}
+    >
       <View activePanel={activePanel}>
         <Panel id="panel1">
           <PanelHeader>
