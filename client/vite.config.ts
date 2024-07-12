@@ -1,26 +1,19 @@
 import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react-swc";
-import path from "path";
+// import fs from "fs";
 
 export default defineConfig({
   plugins: [react()],
-  base: "/api-client/",
-  build: {
-    rollupOptions: {
-      input: {
-        main: path.resolve(__dirname, "index.html"),
-      },
-      output: {
-        dir: "dist",
-        entryFileNames: "assets/[name].js",
-        chunkFileNames: "assets/[name].js",
-        assetFileNames: "assets/[name].[ext]",
-      },
-    },
-  },
-  resolve: {
-    alias: {
-      "@": path.resolve(__dirname, "src"),
-    },
-  },
+  // server: {
+  //   port: 443,
+  //   host: "0.0.0.0",
+  //   hmr: {
+  //     host: "woof-mini-app.local",
+  //     port: 443,
+  //   },
+  //   https: {
+  //     key: fs.readFileSync("./.cert/localhost-key.pem"),
+  //     cert: fs.readFileSync("./.cert/localhost.pem"),
+  //   },
+  // },
 });
