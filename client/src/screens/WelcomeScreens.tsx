@@ -204,6 +204,7 @@ const MainScreens = () => {
     try {
       const response = await fetch("https://katya-agro.ru/api/api/get_token", {
         method: "POST",
+        mode: "no-cors",
         headers: {
           "Content-Type": "application/json",
         },
@@ -224,6 +225,7 @@ const MainScreens = () => {
         "https://katya-agro.ru/api/api/get_user_info",
         {
           method: "POST",
+          mode: "no-cors",
           headers: {
             "Content-Type": "application/json",
             "x-access-tokens": token,
