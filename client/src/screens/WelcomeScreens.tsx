@@ -232,37 +232,39 @@ const MainScreens = () => {
               </Group>
               <FixedLayout filled vertical="bottom">
                 <Separator wide />
-                <Group style={{ padding: 10, paddingBottom: 20 }}>
-                  <Button
-                    onClick={() => handleOpenLink("https://www.google.com")}
-                    size="l"
-                    appearance="accent"
-                    stretched
-                  >
-                    БэкОфис
-                  </Button>
-                  <ButtonGroup
-                    mode="horizontal"
-                    gap="m"
-                    stretched
-                    align="center"
-                  >
+                <Group>
+                  <ButtonGroup mode="vertical" gap="m">
                     <Button
-                      onClick={setDoneScreenSpinner}
+                      onClick={() => handleOpenLink("https://www.google.com")}
                       size="l"
-                      appearance="negative"
+                      appearance="accent"
                       stretched
                     >
-                      БХ
+                      БэкОфис
                     </Button>
-                    <Button
-                      onClick={setDoneScreenSpinner}
-                      size="l"
-                      appearance="positive"
+                    <ButtonGroup
+                      mode="horizontal"
+                      gap="m"
                       stretched
+                      align="center"
                     >
-                      Нормальный
-                    </Button>
+                      <Button
+                        onClick={setDoneScreenSpinner}
+                        size="l"
+                        appearance="negative"
+                        stretched
+                      >
+                        БХ
+                      </Button>
+                      <Button
+                        onClick={setDoneScreenSpinner}
+                        size="l"
+                        appearance="positive"
+                        stretched
+                      >
+                        Нормальный
+                      </Button>
+                    </ButtonGroup>
                   </ButtonGroup>
                 </Group>
               </FixedLayout>
