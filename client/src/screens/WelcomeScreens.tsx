@@ -127,6 +127,7 @@ const MainScreens = () => {
 
   // Function to fetch tasks
   const fetchTasks = async (token) => {
+    setLoading(true); // Set loading to true before fetching
     try {
       const response = await fetch("https://katya-agro.ru/api/api/get_tasks", {
         method: "GET",
@@ -138,21 +139,20 @@ const MainScreens = () => {
       const data = await response.json();
       if (Array.isArray(data.tasks)) {
         console.log(data);
-        setCards(data.tasks); // Обновляем состояние с задачами
+        setCards(data.tasks);
       } else {
         console.error("Unexpected response format:", data);
       }
     } catch (error) {
       console.error("Error fetching tasks:", error);
     } finally {
-      setLoading(false); // Set loading to false after fetching
+      setLoading(false);
     }
   };
 
   // Получаем ID пользователя из initData Telegram WebApp и JWT токен
   useEffect(() => {
     const fetchData = async () => {
-      setLoading(true);
       if (window.Telegram?.WebApp?.initDataUnsafe?.user?.id) {
         const userId = window.Telegram.WebApp.initDataUnsafe.user.id;
         setUserId(userId);
@@ -161,15 +161,13 @@ const MainScreens = () => {
           console.log("Received JWT Token:", token);
           setToken(token);
           fetchUserInfo(userId, token);
-          fetchTasks(token); // Получаем задачи
+          fetchTasks(token);
         } else {
           console.error("Failed to fetch JWT token from bot");
         }
       }
     };
-    fetchData().finally(() => {
-      setLoading(false);
-    });
+    fetchData();
   }, []);
 
   const getTimerColor = (elapsedMinutes) => {
