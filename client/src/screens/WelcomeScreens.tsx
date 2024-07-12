@@ -14,7 +14,7 @@ import {
   FixedLayout,
   Separator,
   Spacing,
-  Skeleton,
+  Placeholder,
 } from "@vkontakte/vkui";
 import { Panel } from "@vkontakte/vkui/dist/components/Panel/Panel";
 import { View } from "@vkontakte/vkui/dist/components/View/View";
@@ -146,8 +146,8 @@ const MainScreens = () => {
   const [activePanel, setActivePanel] = useState("panel1");
   const [selectedCard, setSelectedCard] = useState(null);
   const [timers, setTimers] = useState({});
-  const [loading, setLoading] = useState(true);
   const [userId, setUserId] = useState(null);
+  const [token, setToken] = useState(null);
   const [popout, setPopout] = useState(null);
 
   const handleCardClick = (card) => {
@@ -244,6 +244,7 @@ const MainScreens = () => {
         const token = await fetchTokenFromBot(userId); // Получаем токен от бота
         if (token) {
           console.log("Received JWT Token:", token);
+          setToken(token);
           fetchUserInfo(userId, token);
         } else {
           console.error("Failed to fetch JWT token from bot");
@@ -251,12 +252,6 @@ const MainScreens = () => {
       }
     };
     fetchData();
-  }, []);
-
-  useEffect(() => {
-    setTimeout(() => {
-      setLoading(false);
-    }, 0);
   }, []);
 
   const getTimerColor = (elapsedMinutes) => {
@@ -279,26 +274,12 @@ const MainScreens = () => {
             </PanelHeaderContent>
           </PanelHeader>
           <Group>
-            {loading ? (
-              <>
-                {cards.map((card) => (
-                  <Cell key={card.id} expandable="auto">
-                    <Skeleton key={card.id} width="100%" />
-                  </Cell>
-                ))}
-              </>
-            ) : (
+            {token ? (
               cards.map((card) => (
                 <Cell
                   key={card.id}
                   expandable="auto"
-                  before={
-                    <Icon28UserOutline
-                    // color={getTimerColor(
-                    //   timers[card.id] ? timers[card.id].minutes : 0
-                    // )}
-                    />
-                  }
+                  before={<Icon28UserOutline />}
                   onClick={() => handleCardClick(card)}
                   after={
                     <div
@@ -320,6 +301,15 @@ const MainScreens = () => {
                   {card.title}
                 </Cell>
               ))
+            ) : (
+              <Group>
+                <Placeholder
+                  icon={
+                    <img src="../../public/aphrodita_logo.png" width={200} />
+                  }
+                  header="Афродита вас не знает!"
+                ></Placeholder>
+              </Group>
             )}
           </Group>
         </Panel>
