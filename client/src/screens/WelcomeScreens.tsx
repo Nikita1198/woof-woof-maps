@@ -64,7 +64,7 @@ const MainScreens = () => {
     const interval = setInterval(() => {
       const newTimers = { ...timers };
       cards.forEach((card) => {
-        const registrationTime = new Date(card.details.регистрация).getTime();
+        const registrationTime = new Date(card.details?.регистрация).getTime();
         const currentTime = new Date().getTime();
         const elapsedTime = currentTime - registrationTime;
 
@@ -81,7 +81,7 @@ const MainScreens = () => {
         };
       });
       setTimers(newTimers);
-    }, 0);
+    }, 1000);
 
     return () => clearInterval(interval);
   }, [timers, cards]);
@@ -135,7 +135,12 @@ const MainScreens = () => {
         },
       });
       const data = await response.json();
-      setCards(data); // Обновляем состояние с задачами
+      if (Array.isArray(data.tasks)) {
+        console.log(data);
+        setCards(data.tasks); // Обновляем состояние с задачами
+      } else {
+        console.error("Unexpected response format:", data);
+      }
     } catch (error) {
       console.error("Error fetching tasks:", error);
     }
@@ -204,7 +209,7 @@ const MainScreens = () => {
                       </div>
                     }
                   >
-                    {card.title}
+                    {card.summary}
                   </Cell>
                 ))
               ) : (
@@ -235,32 +240,32 @@ const MainScreens = () => {
                 }
               >
                 <PanelHeaderContent status={selectedCard.description}>
-                  {selectedCard.title}
+                  {selectedCard.summary}
                 </PanelHeaderContent>
               </PanelHeader>
               <Group>
                 <SimpleCell>
                   Описание: {selectedCard.description}
                   <Spacing size={13} />
-                  Номер счета: {selectedCard.details.номер_счета}
+                  Номер счета: {selectedCard.details?.номер_счета}
                   <Spacing size={13} />
-                  Статус: {selectedCard.details.статус}
+                  Статус: {selectedCard.status}
                   <Spacing size={13} />
-                  Рейтинг: {selectedCard.details.рейтинг}
+                  Рейтинг: {selectedCard.details?.рейтинг}
                   <Spacing size={13} />
-                  Что произошло: {selectedCard.details.что_произошло}
+                  Что произошло: {selectedCard.details?.что_произошло}
                   <Spacing size={13} />
-                  Купон: {selectedCard.details.купон}
+                  Купон: {selectedCard.details?.купон}
                   <Spacing size={13} />
-                  Регистрация: {selectedCard.details.регистрация}
+                  Регистрация: {selectedCard.details?.регистрация}
                   <Spacing size={13} />
-                  Расчет: {selectedCard.details.расчет}
+                  Расчет: {selectedCard.details?.расчет}
                   <Spacing size={13} />
-                  Ставка: {selectedCard.details.ставка}
+                  Ставка: {selectedCard.details?.ставка}
                   <Spacing size={13} />
-                  Выигрыш: {selectedCard.details.выигрыш}
+                  Выигрыш: {selectedCard.details?.выигрыш}
                   <Spacing size={13} />
-                  Коэффициент: {selectedCard.details.коэффициент}
+                  Коэффициент: {selectedCard.details?.коэффициент}
                 </SimpleCell>
               </Group>
               <Group style={{ marginBottom: 100 }}>
