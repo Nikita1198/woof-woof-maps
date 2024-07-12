@@ -173,7 +173,11 @@ const MainScreens = () => {
                       before={<Icon28UserOutline />}
                       onClick={() => handleCardClick(card)}
                       after={
-                        <TimeAgo date={card.created} formatter={formatter} />
+                        <TimeAgo
+                          date={card.created}
+                          formatter={formatter}
+                          live={true}
+                        />
                       }
                     >
                       {card.summary}
@@ -223,18 +227,20 @@ const MainScreens = () => {
                 <MiniInfoCell
                   onClick={() => handleOpenLink("https://www.google.com")}
                 >
-                  БэкОфис
-                </MiniInfoCell>
-                <MiniInfoCell
-                  onClick={() => handleOpenLink("https://www.google.com")}
-                >
                   Графана
                 </MiniInfoCell>
               </Group>
               <FixedLayout filled vertical="bottom">
                 <Separator wide />
                 <Group style={{ padding: 10, paddingBottom: 20 }}>
-                  {}
+                  <Button
+                    onClick={() => handleOpenLink("https://www.google.com")}
+                    size="l"
+                    appearance="accent"
+                    stretched
+                  >
+                    БэкОфис
+                  </Button>
                   <ButtonGroup
                     mode="horizontal"
                     gap="m"
