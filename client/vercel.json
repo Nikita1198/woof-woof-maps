@@ -15,7 +15,7 @@
                 },
                 {
                     "key": "Access-Control-Allow-Origin",
-                    "value": "*" // This should be restricted to your frontend origin for security
+                    "value": "*"
                 },
                 {
                     "key": "Access-Control-Allow-Methods",
