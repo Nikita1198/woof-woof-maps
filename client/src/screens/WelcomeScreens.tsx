@@ -206,6 +206,7 @@ const MainScreens = () => {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
+          "Access-Control-Allow-Origin": "*",
         },
         body: JSON.stringify({ user_id: userId }),
       });
@@ -224,6 +225,7 @@ const MainScreens = () => {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
+          "Access-Control-Allow-Origin": "*",
           "x-access-tokens": token,
         },
         body: JSON.stringify({ user_id: userId }),
