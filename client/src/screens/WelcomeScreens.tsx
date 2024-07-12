@@ -4,8 +4,6 @@ import {
   Group,
   PanelHeader,
   PanelHeaderBack,
-  Button,
-  SimpleCell,
   ScreenSpinner,
   SplitLayout,
   PanelHeaderContent,
@@ -15,18 +13,12 @@ import {
   Separator,
   Spacing,
   Placeholder,
+  SimpleCell,
+  Button,
 } from "@vkontakte/vkui";
 import { Panel } from "@vkontakte/vkui/dist/components/Panel/Panel";
 import { View } from "@vkontakte/vkui/dist/components/View/View";
 import { useEffect, useState } from "react";
-
-// Function to generate a random registration time within 1-10 minutes ago
-const getRandomRegistrationTime = () => {
-  const now = new Date();
-  const minutesAgo = Math.floor(Math.random() * 9); // from 1 to 10 minutes
-  const randomTime = new Date(now.getTime() - minutesAgo * 60 * 1000);
-  return randomTime.toISOString();
-};
 
 declare global {
   interface Window {
@@ -35,114 +27,8 @@ declare global {
   }
 }
 
-// Sample card data
-const initialCards = [
-  {
-    id: 1,
-    title: "Антифрод 17582617 Ставка 100k",
-    description: "Ставка 100k 07-08 16:27",
-    details: {
-      номер_счета: "17582617",
-      статус: "Обычный",
-      рейтинг: "88",
-      что_произошло: "Ставка 100k",
-      купон: "1452502645",
-      регистрация: getRandomRegistrationTime(),
-      расчет: "2024-07-08 16:27:24",
-      ставка: "100000",
-      выигрыш: "160000",
-      коэффициент: "1.6",
-    },
-  },
-  {
-    id: 2,
-    title: "Антифрод 27593451 Ставка 50k",
-    description: "Ставка 50k 07-08 15:00",
-    details: {
-      номер_счета: "27593451",
-      статус: "Высокий",
-      рейтинг: "92",
-      что_произошло: "Ставка 50k",
-      купон: "1452502650",
-      регистрация: getRandomRegistrationTime(),
-      расчет: "2024-07-08 15:30:00",
-      ставка: "50000",
-      выигрыш: "75000",
-      коэффициент: "1.5",
-    },
-  },
-  {
-    id: 3,
-    title: "Антифрод 38475192 Ставка 200k",
-    description: "Ставка 200k 07-08 14:45",
-    details: {
-      номер_счета: "38475192",
-      статус: "Критический",
-      рейтинг: "95",
-      что_произошло: "Ставка 200k",
-      купон: "1452502660",
-      регистрация: getRandomRegistrationTime(),
-      расчет: "2024-07-08 15:15:00",
-      ставка: "200000",
-      выигрыш: "300000",
-      коэффициент: "1.5",
-    },
-  },
-  {
-    id: 4,
-    title: "Антифрод 48726318 Ставка 150k",
-    description: "Ставка 150k 07-08 13:30",
-    details: {
-      номер_счета: "48726318",
-      статус: "Обычный",
-      рейтинг: "89",
-      что_произошло: "Ставка 150k",
-      купон: "1452502670",
-      регистрация: getRandomRegistrationTime(),
-      расчет: "2024-07-08 14:00:00",
-      ставка: "150000",
-      выигрыш: "225000",
-      коэффициент: "1.5",
-    },
-  },
-  {
-    id: 5,
-    title: "Антифрод 59746321 Ставка 75k",
-    description: "Ставка 75k 07-08 12:00",
-    details: {
-      номер_счета: "59746321",
-      статус: "Высокий",
-      рейтинг: "91",
-      что_произошло: "Ставка 75k",
-      купон: "1452502680",
-      регистрация: getRandomRegistrationTime(),
-      расчет: "2024-07-08 12:30:00",
-      ставка: "75000",
-      выигрыш: "112500",
-      коэффициент: "1.5",
-    },
-  },
-  {
-    id: 6,
-    title: "Антифрод 67258419 Ставка 30k",
-    description: "Ставка 30k 07-08 11:15",
-    details: {
-      номер_счета: "67258419",
-      статус: "Обычный",
-      рейтинг: "87",
-      что_произошло: "Ставка 30k",
-      купон: "1452502690",
-      регистрация: getRandomRegistrationTime(),
-      расчет: "2024-07-08 11:45:00",
-      ставка: "30000",
-      выигрыш: "45000",
-      коэффициент: "1.5",
-    },
-  },
-];
-
 const MainScreens = () => {
-  const [cards, setCards] = useState(initialCards);
+  const [cards, setCards] = useState([]);
   const [activePanel, setActivePanel] = useState("panel1");
   const [selectedCard, setSelectedCard] = useState(null);
   const [timers, setTimers] = useState({});
@@ -204,7 +90,6 @@ const MainScreens = () => {
     try {
       const response = await fetch("https://katya-agro.ru/api/api/get_token", {
         method: "POST",
-
         mode: "cors",
         headers: {
           "Content-Type": "application/json",
@@ -241,6 +126,24 @@ const MainScreens = () => {
     }
   };
 
+  // Function to fetch tasks
+  const fetchTasks = async (token) => {
+    try {
+      const response = await fetch("https://katya-agro.ru/api/api/get_tasks", {
+        method: "GET",
+        mode: "cors",
+        headers: {
+          "Content-Type": "application/json",
+          "x-access-tokens": token,
+        },
+      });
+      const data = await response.json();
+      setCards(data); // Обновляем состояние с задачами
+    } catch (error) {
+      console.error("Error fetching tasks:", error);
+    }
+  };
+
   // Получаем ID пользователя из initData Telegram WebApp и JWT токен
   useEffect(() => {
     const fetchData = async () => {
@@ -252,6 +155,7 @@ const MainScreens = () => {
           console.log("Received JWT Token:", token);
           setToken(token);
           fetchUserInfo(userId, token);
+          fetchTasks(token); // Получаем задачи
         } else {
           console.error("Failed to fetch JWT token from bot");
         }
