@@ -202,7 +202,7 @@ const MainScreens = () => {
 
   const fetchTokenFromBot = async (userId) => {
     try {
-      const response = await fetch("https://api.katya-agro.ru/api/get_token", {
+      const response = await fetch("https://api.katya-agro.ru/get_token", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -217,7 +217,6 @@ const MainScreens = () => {
     }
   };
 
-  // Function to fetch user info
   const fetchUserInfo = async (userId, token) => {
     try {
       const response = await fetch(
@@ -238,7 +237,6 @@ const MainScreens = () => {
     }
   };
 
-  // Получаем ID пользователя из initData Telegram WebApp и JWT токен
   useEffect(() => {
     const fetchData = async () => {
       if (window.Telegram?.WebApp?.initDataUnsafe?.user?.id) {
