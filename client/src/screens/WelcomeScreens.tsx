@@ -302,14 +302,10 @@ const MainScreens = () => {
                 </Cell>
               ))
             ) : (
-              <Group>
-                <Placeholder
-                  icon={
-                    <img src="../../public/aphrodita_logo.png" width={200} />
-                  }
-                  header="Афродита вас не знает!"
-                ></Placeholder>
-              </Group>
+              <Placeholder
+                icon={<img src="../../public/aphrodita_logo.png" width={200} />}
+                header="Афродита вас не знает!"
+              ></Placeholder>
             )}
           </Group>
         </Panel>
