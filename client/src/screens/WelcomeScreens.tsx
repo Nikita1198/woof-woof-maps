@@ -18,6 +18,7 @@ import {
   Placeholder,
   SimpleCell,
   Button,
+  Avatar,
 } from "@vkontakte/vkui";
 
 import TimeAgo from "react-timeago";
@@ -88,28 +89,6 @@ const MainScreens = () => {
     }
   };
 
-  // Function to fetch user info
-  const fetchUserInfo = async (userId, token) => {
-    try {
-      const response = await fetch(
-        "https://katya-agro.ru/api/api/get_user_info",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            "x-access-tokens": token,
-          },
-          body: JSON.stringify({ user_id: userId }),
-        }
-      );
-      const data = await response.json();
-      console.log(data); // Используйте данные пользователя по мере необходимости
-    } catch (error) {
-      console.error("Error fetching user info:", error);
-      throw new Error("Failed to fetch user info");
-    }
-  };
-
   // Function to fetch tasks
   const fetchTasks = async (token) => {
     try {
@@ -151,9 +130,8 @@ const MainScreens = () => {
           const token = await fetchTokenFromBot(userId);
           console.log("Received JWT Token:", token);
           setToken(token);
-          await fetchUserInfo(userId, token);
           await fetchTasks(token);
-          startPolling(token); // Start polling for tasks
+          startPolling(token);
         } else {
           throw new Error("User ID not found");
         }
@@ -185,7 +163,13 @@ const MainScreens = () => {
                     <Cell
                       key={card.id}
                       expandable="auto"
-                      before={<Icon28UserOutline />}
+                      before={
+                        !card.assignee_avatar ? (
+                          <Avatar size={24} src={card.assignee_avatar} />
+                        ) : (
+                          <Icon28UserOutline />
+                        )
+                      }
                       onClick={() => handleCardClick(card)}
                       after={
                         <TimeAgo
