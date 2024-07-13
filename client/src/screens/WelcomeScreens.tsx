@@ -164,7 +164,7 @@ const MainScreens = () => {
                       key={card.id}
                       expandable="auto"
                       before={
-                        !card.assignee_avatar ? (
+                        card.assignee_avatar ? (
                           <Avatar size={24} src={card.assignee_avatar} />
                         ) : (
                           <Icon28UserOutline />
