@@ -217,7 +217,7 @@ const MainScreens = () => {
               </PanelHeader>
               <Group>
                 <div
-                  style={{ padding: 10, paddingTop: 5, paddingBottom: 5 }}
+                  style={{ padding: "0 10px" }}
                   dangerouslySetInnerHTML={{ __html: selectedCard.description }}
                 />
               </Group>
