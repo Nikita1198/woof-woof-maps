@@ -156,7 +156,7 @@ const MainScreens = () => {
             </PanelHeaderContent>
           </PanelHeader>
           {!loading && (
-            <Accordion defaultExpanded>
+            <Accordion>
               <Accordion.Summary iconPosition="before">All</Accordion.Summary>
               <Accordion.Content>
                 <Group>
