@@ -18,6 +18,7 @@ import {
   Placeholder,
   Button,
   Avatar,
+  Accordion,
 } from "@vkontakte/vkui";
 
 import TimeAgo from "react-timeago";
@@ -155,46 +156,54 @@ const MainScreens = () => {
             </PanelHeaderContent>
           </PanelHeader>
           {!loading && (
-            <Group>
-              {token ? (
-                cards.length !== 0 ? (
-                  cards.map((card) => (
-                    <Cell
-                      key={card.id}
-                      expandable="auto"
-                      before={
-                        card.assignee_avatar ? (
-                          <Avatar size={28} src={card.assignee_avatar} />
-                        ) : (
-                          <Icon28UserOutline />
-                        )
-                      }
-                      onClick={() => handleCardClick(card)}
-                      after={
-                        <TimeAgo
-                          date={card.created}
-                          formatter={formatter}
-                          live={true}
-                        />
+            <Accordion expanded>
+              <Accordion.Summary iconPosition="before">All</Accordion.Summary>
+              <Accordion.Content>
+                <Group>
+                  {token ? (
+                    cards.length !== 0 ? (
+                      cards.map((card) => (
+                        <Cell
+                          key={card.id}
+                          expandable="auto"
+                          before={
+                            card.assignee_avatar ? (
+                              <Avatar size={28} src={card.assignee_avatar} />
+                            ) : (
+                              <Icon28UserOutline />
+                            )
+                          }
+                          onClick={() => handleCardClick(card)}
+                          after={
+                            <TimeAgo
+                              date={card.created}
+                              formatter={formatter}
+                              live={true}
+                            />
+                          }
+                        >
+                          {card.summary}
+                        </Cell>
+                      ))
+                    ) : (
+                      <Placeholder
+                        icon={<Logo />}
+                        header="Инциденты отсутствуют"
+                      />
+                    )
+                  ) : (
+                    <Placeholder
+                      icon={<Logo />}
+                      header={
+                        '"Не все то золото, что блестит, и не все то зло, что прячется в тени."'
                       }
                     >
-                      {card.summary}
-                    </Cell>
-                  ))
-                ) : (
-                  <Placeholder icon={<Logo />} header="Инциденты отсутствуют" />
-                )
-              ) : (
-                <Placeholder
-                  icon={<Logo />}
-                  header={
-                    '"Не все то золото, что блестит, и не все то зло, что прячется в тени."'
-                  }
-                >
-                  Афродита вас не знает!
-                </Placeholder>
-              )}
-            </Group>
+                      Афродита вас не знает!
+                    </Placeholder>
+                  )}
+                </Group>
+              </Accordion.Content>
+            </Accordion>
           )}
         </Panel>
         <Panel id="panel2">
