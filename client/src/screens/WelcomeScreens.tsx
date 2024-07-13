@@ -27,6 +27,7 @@ import buildFormatter from "react-timeago/lib/formatters/buildFormatter";
 import { Panel } from "@vkontakte/vkui/dist/components/Panel/Panel";
 import { View } from "@vkontakte/vkui/dist/components/View/View";
 import { useEffect, useState } from "react";
+import Logo from "../components/Logo";
 
 declare global {
   interface Window {
@@ -134,10 +135,10 @@ const MainScreens = () => {
   };
 
   // Function to set up polling
-  const startPolling = (token, interval = 60000) => {
-    fetchTasks(token); // Initial fetch
+  const startPolling = (token, interval = 10000) => {
+    fetchTasks(token);
     const polling = setInterval(() => fetchTasks(token), interval);
-    return () => clearInterval(polling); // Return a cleanup function
+    return () => clearInterval(polling);
   };
 
   // Получаем ID пользователя из initData Telegram WebApp и JWT токен
@@ -198,18 +199,11 @@ const MainScreens = () => {
                     </Cell>
                   ))
                 ) : (
-                  <Placeholder
-                    icon={
-                      <img src="../aphrodita_logo.png" width={170} alt="Logo" />
-                    }
-                    header="Инциденты отсутствуют"
-                  />
+                  <Placeholder icon={<Logo />} header="Инциденты отсутствуют" />
                 )
               ) : (
                 <Placeholder
-                  icon={
-                    <img src="../aphrodita_logo.png" width={170} alt="Logo" />
-                  }
+                  icon={<Logo />}
                   header={
                     '"Не все то золото, что блестит, и не все то зло, что прячется в тени."'
                   }
@@ -226,7 +220,12 @@ const MainScreens = () => {
               <PanelHeader
                 delimiter="spacing"
                 before={
-                  <PanelHeaderBack onClick={() => setActivePanel("panel1")} />
+                  <PanelHeaderBack
+                    onClick={async () => {
+                      setActivePanel("panel1");
+                      await fetchTasks(token);
+                    }}
+                  />
                 }
               >
                 <PanelHeaderContent status={selectedCard.created}>
