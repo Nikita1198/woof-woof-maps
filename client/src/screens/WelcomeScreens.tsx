@@ -200,8 +200,12 @@ const MainScreens = () => {
                   icon={
                     <img src="../aphrodita_logo.png" width={170} alt="Logo" />
                   }
-                  header="Афродита вас не знает"
-                />
+                  header={
+                    '"Не все то золото, что блестит, и не все то зло, что прячется в тени."'
+                  }
+                >
+                  Афродита вас не знает!
+                </Placeholder>
               )}
             </Group>
           )}
