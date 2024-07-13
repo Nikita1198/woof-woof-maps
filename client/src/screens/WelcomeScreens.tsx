@@ -217,13 +217,14 @@ const MainScreens = () => {
                 </PanelHeaderContent>
               </PanelHeader>
               <Group>
-                <div style={{ padding: 20 }}>
-                  <Text>{selectedCard.description}</Text>
-                </div>
+                <div
+                  style={{ padding: 15, paddingTop: 10 }}
+                  dangerouslySetInnerHTML={{ __html: selectedCard.description }}
+                />
               </Group>
               <FixedLayout filled vertical="bottom">
                 <Separator wide />
-                <Group style={{ padding: 15, paddingBottom: "1.7rem" }}>
+                <Group style={{ padding: 15 }}>
                   <ButtonGroup mode="vertical" gap="m" stretched>
                     <ButtonGroup
                       mode="horizontal"
