@@ -41,8 +41,8 @@ const MainScreens = () => {
   const [selectedCard, setSelectedCard] = useState(null);
   const [userId, setUserId] = useState(null);
   const [token, setToken] = useState(null);
-  const [popout, setPopout] = useState(null);
-  const [loading, setLoading] = useState(false); // New state for loading
+  const [popout, setPopout] = useState(<ScreenSpinner state="loading" />);
+  const [loading, setLoading] = useState(true); // New state for loading
 
   const handleCardClick = (card) => {
     setSelectedCard(card);
@@ -83,7 +83,7 @@ const MainScreens = () => {
       return data.token;
     } catch (error) {
       console.error("Error fetching token from bot:", error);
-      return null;
+      throw new Error("Failed to fetch token from bot");
     }
   };
 
@@ -105,12 +105,12 @@ const MainScreens = () => {
       console.log(data); // Используйте данные пользователя по мере необходимости
     } catch (error) {
       console.error("Error fetching user info:", error);
+      throw new Error("Failed to fetch user info");
     }
   };
 
   // Function to fetch tasks
   const fetchTasks = async (token) => {
-    setLoading(true); // Set loading to true before fetching
     try {
       const response = await fetch("https://katya-agro.ru/api/api/get_tasks", {
         method: "GET",
@@ -125,40 +125,50 @@ const MainScreens = () => {
         setCards(data.tasks);
       } else {
         console.error("Unexpected response format:", data);
+        throw new Error("Unexpected response format");
       }
     } catch (error) {
       console.error("Error fetching tasks:", error);
-    } finally {
-      setLoading(false);
+      throw new Error("Error fetching tasks");
     }
+  };
+
+  // Function to set up polling
+  const startPolling = (token, interval = 60000) => {
+    fetchTasks(token); // Initial fetch
+    const polling = setInterval(() => fetchTasks(token), interval);
+    return () => clearInterval(polling); // Return a cleanup function
   };
 
   // Получаем ID пользователя из initData Telegram WebApp и JWT токен
   useEffect(() => {
     const fetchData = async () => {
-      if (window.Telegram?.WebApp?.initDataUnsafe?.user?.id) {
-        const userId = window.Telegram.WebApp.initDataUnsafe.user.id;
-        setUserId(userId);
-        const token = await fetchTokenFromBot(userId);
-        if (token) {
+      try {
+        if (window.Telegram?.WebApp?.initDataUnsafe?.user?.id) {
+          const userId = window.Telegram.WebApp.initDataUnsafe.user.id;
+          setUserId(userId);
+          const token = await fetchTokenFromBot(userId);
           console.log("Received JWT Token:", token);
           setToken(token);
-          fetchUserInfo(userId, token);
-          fetchTasks(token);
+          await fetchUserInfo(userId, token);
+          await fetchTasks(token);
+          startPolling(token); // Start polling for tasks
         } else {
-          console.error("Failed to fetch JWT token from bot");
+          throw new Error("User ID not found");
         }
+      } catch (error) {
+        console.error("Initialization error:", error);
+      } finally {
+        setLoading(false);
+        clearPopout();
       }
     };
+
     fetchData();
   }, []);
 
   return (
-    <SplitLayout
-      popout={popout || (loading && <ScreenSpinner state="loading" />)}
-      aria-live="polite"
-      aria-busy={!!popout || loading}
-    >
+    <SplitLayout popout={popout} aria-live="polite" aria-busy={!!popout}>
       <View activePanel={activePanel}>
         <Panel id="panel1">
           <PanelHeader>
