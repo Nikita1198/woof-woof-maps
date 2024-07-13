@@ -230,7 +230,7 @@ const MainScreens = () => {
                       gap="m"
                       stretched
                       align="center"
-                      style={{ marginBottom: 7, marginTop: 0 }}
+                      style={{ marginBottom: 8, marginTop: 0 }}
                     >
                       <Button
                         onClick={() => handleOpenLink("https://www.google.com")}
@@ -271,7 +271,7 @@ const MainScreens = () => {
                     >
                       <Button
                         onClick={setDoneScreenSpinner}
-                        size="l"
+                        size="m"
                         appearance="negative"
                         stretched
                       >
@@ -279,7 +279,7 @@ const MainScreens = () => {
                       </Button>
                       <Button
                         onClick={setDoneScreenSpinner}
-                        size="l"
+                        size="m"
                         appearance="positive"
                         stretched
                       >
