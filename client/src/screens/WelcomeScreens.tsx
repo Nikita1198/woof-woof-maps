@@ -16,7 +16,7 @@ import {
   FixedLayout,
   Separator,
   Placeholder,
-  SimpleCell,
+  Text,
   Button,
   Avatar,
 } from "@vkontakte/vkui";
@@ -217,7 +217,7 @@ const MainScreens = () => {
                 </PanelHeaderContent>
               </PanelHeader>
               <Group>
-                <SimpleCell>{selectedCard.description}</SimpleCell>
+                <Text>{selectedCard.description}</Text>
               </Group>
               <FixedLayout filled vertical="bottom">
                 <Separator wide />
