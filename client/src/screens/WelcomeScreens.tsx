@@ -16,7 +16,6 @@ import {
   FixedLayout,
   Separator,
   Placeholder,
-  Text,
   Button,
   Avatar,
 } from "@vkontakte/vkui";
@@ -218,7 +217,7 @@ const MainScreens = () => {
               </PanelHeader>
               <Group>
                 <div
-                  style={{ padding: 15, paddingTop: 10 }}
+                  style={{ padding: 10, paddingTop: 5, paddingBottom: 5 }}
                   dangerouslySetInnerHTML={{ __html: selectedCard.description }}
                 />
               </Group>
