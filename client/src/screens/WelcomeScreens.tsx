@@ -1,5 +1,7 @@
 import {
+  Icon24AddOutline,
   Icon24GraphOutline,
+  Icon24MinusOutline,
   Icon24StorefrontOutline,
   Icon24UserSquareOutline,
   Icon28UserOutline,
@@ -157,7 +159,12 @@ const MainScreens = () => {
           </PanelHeader>
           {!loading && (
             <Accordion defaultExpanded={true}>
-              <Accordion.Summary iconPosition="before">All</Accordion.Summary>
+              <Accordion.Summary
+                ExpandIcon={Icon24AddOutline}
+                CollapseIcon={Icon24MinusOutline}
+              >
+                All
+              </Accordion.Summary>
               <Accordion.Content>
                 <Group>
                   {token ? (
