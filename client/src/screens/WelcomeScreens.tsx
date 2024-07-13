@@ -217,7 +217,9 @@ const MainScreens = () => {
                 </PanelHeaderContent>
               </PanelHeader>
               <Group>
-                <Text>{selectedCard.description}</Text>
+                <div style={{ padding: 20 }}>
+                  <Text>{selectedCard.description}</Text>
+                </div>
               </Group>
               <FixedLayout filled vertical="bottom">
                 <Separator wide />
