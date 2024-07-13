@@ -145,8 +145,8 @@ const MainScreens = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        if (window.Telegram?.WebApp?.initDataUnsafe?.user?.id) {
-          const userId = window.Telegram.WebApp.initDataUnsafe.user.id;
+        if (true) {
+          const userId = 1123817078;
           setUserId(userId);
           const token = await fetchTokenFromBot(userId);
           console.log("Received JWT Token:", token);
@@ -237,13 +237,14 @@ const MainScreens = () => {
               </Group>
               <FixedLayout filled vertical="bottom">
                 <Separator wide />
-                <Group style={{ padding: 15, paddingBottom: "1.5rem" }}>
+                <Group style={{ padding: 15, paddingBottom: "1.7rem" }}>
                   <ButtonGroup mode="vertical" gap="m" stretched>
                     <ButtonGroup
                       mode="horizontal"
                       gap="m"
                       stretched
                       align="center"
+                      style={{ marginBottom: 7, marginTop: 0 }}
                     >
                       <Button
                         onClick={() => handleOpenLink("https://www.google.com")}
