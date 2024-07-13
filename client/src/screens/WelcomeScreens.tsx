@@ -223,14 +223,13 @@ const MainScreens = () => {
               </Group>
               <FixedLayout filled vertical="bottom">
                 <Separator wide />
-                <Group style={{ padding: 15 }}>
+                <Group style={{ padding: 15, paddingBottom: 20 }}>
                   <ButtonGroup mode="vertical" gap="m" stretched>
                     <ButtonGroup
                       mode="horizontal"
                       gap="m"
                       stretched
                       align="center"
-                      style={{ marginBottom: 8, marginTop: 0 }}
                     >
                       <Button
                         onClick={() => handleOpenLink("https://www.google.com")}
