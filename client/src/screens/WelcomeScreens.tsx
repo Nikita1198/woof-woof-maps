@@ -19,6 +19,8 @@ import {
   Button,
   Avatar,
   Accordion,
+  Div,
+  Banner,
 } from "@vkontakte/vkui";
 
 import TimeAgo from "react-timeago";
@@ -209,7 +211,7 @@ const MainScreens = () => {
                   Object.keys(tasks).map((label) => (
                     <Accordion key={label} defaultExpanded={true}>
                       <Accordion.Summary>
-                        {label === "" ? "Неопределенный" : label}
+                        {label === "" ? "Мистика Афродиты" : label}
                       </Accordion.Summary>
                       <Accordion.Content>
                         {tasks[label].map((task) => (
@@ -273,6 +275,15 @@ const MainScreens = () => {
                 </PanelHeaderContent>
               </PanelHeader>
               <Group>
+                {selectedTask.label === "" ?? (
+                  <Div>
+                    <Banner
+                      before={<Avatar src="../aphrodita_logo.png" />}
+                      header="Мистика Афродиты"
+                      text="Инцидент остался в тени"
+                    />
+                  </Div>
+                )}
                 <div
                   style={{ padding: "0 10px" }}
                   dangerouslySetInnerHTML={{ __html: selectedTask.description }}
