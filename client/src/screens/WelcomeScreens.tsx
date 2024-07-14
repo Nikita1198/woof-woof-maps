@@ -65,7 +65,28 @@ const MainScreens = () => {
 
       setTimeout(clearPopout, 1000);
 
-      setTasks(tasks.filter((x) => x.id !== selectedTask.id));
+      const updatedTasks = { ...tasks };
+      selectedTask.labels.forEach((label) => {
+        if (updatedTasks[label]) {
+          updatedTasks[label] = updatedTasks[label].filter(
+            (task) => task.id !== selectedTask.id
+          );
+          if (updatedTasks[label].length === 0) {
+            delete updatedTasks[label];
+          }
+        }
+      });
+      if (!selectedTask.labels.length) {
+        if (updatedTasks[""]) {
+          updatedTasks[""] = updatedTasks[""].filter(
+            (task) => task.id !== selectedTask.id
+          );
+          if (updatedTasks[""].length === 0) {
+            delete updatedTasks[""];
+          }
+        }
+      }
+      setTasks(updatedTasks);
       setActivePanel("panel1");
     }, 2000);
   };
@@ -158,7 +179,9 @@ const MainScreens = () => {
                 Object.keys(tasks).length !== 0 ? (
                   Object.keys(tasks).map((label) => (
                     <Accordion key={label} defaultExpanded={true}>
-                      <Accordion.Summary>{label}</Accordion.Summary>
+                      <Accordion.Summary>
+                        {label === "" ? "Неопределенный" : label}
+                      </Accordion.Summary>
                       <Accordion.Content>
                         {tasks[label].map((task) => (
                           <Cell
