@@ -38,16 +38,16 @@ declare global {
 }
 
 const MainScreens = () => {
-  const [cards, setCards] = useState([]);
+  const [tasks, setTasks] = useState([]);
   const [activePanel, setActivePanel] = useState("panel1");
-  const [selectedCard, setSelectedCard] = useState(null);
+  const [selectedTask, setSelectedTask] = useState(null);
   const [userId, setUserId] = useState(null);
   const [token, setToken] = useState(null);
   const [popout, setPopout] = useState(<ScreenSpinner state="loading" />);
-  const [loading, setLoading] = useState(true); // New state for loading
+  const [loading, setLoading] = useState(true);
 
-  const handleCardClick = (card) => {
-    setSelectedCard(card);
+  const handleTaskClick = (task) => {
+    setSelectedTask(task);
     setActivePanel("panel2");
   };
 
@@ -65,7 +65,7 @@ const MainScreens = () => {
 
       setTimeout(clearPopout, 1000);
 
-      setCards(cards.filter((x) => x.id !== selectedCard.id));
+      setTasks(tasks.filter((x) => x.id !== selectedTask.id));
       setActivePanel("panel1");
     }, 2000);
   };
@@ -89,7 +89,6 @@ const MainScreens = () => {
     }
   };
 
-  // Function to fetch tasks
   const fetchTasks = async (token) => {
     try {
       const response = await fetch("https://katya-agro.ru/api/api/get_tasks", {
@@ -100,9 +99,9 @@ const MainScreens = () => {
         },
       });
       const data = await response.json();
-      if (Array.isArray(data.tasks)) {
+      if (data.tasks) {
         console.log(data);
-        setCards(data.tasks);
+        setTasks(data.tasks);
       } else {
         console.error("Unexpected response format:", data);
         throw new Error("Unexpected response format");
@@ -113,14 +112,12 @@ const MainScreens = () => {
     }
   };
 
-  // Function to set up polling
   const startPolling = (token, interval = 10000) => {
     fetchTasks(token);
     const polling = setInterval(() => fetchTasks(token), interval);
     return () => clearInterval(polling);
   };
 
-  // Получаем ID пользователя из initData Telegram WebApp и JWT токен
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -156,58 +153,57 @@ const MainScreens = () => {
             </PanelHeaderContent>
           </PanelHeader>
           {!loading && (
-            <Accordion defaultExpanded={true}>
-              <Accordion.Summary>All</Accordion.Summary>
-              <Accordion.Content>
-                <Group>
-                  {token ? (
-                    cards.length !== 0 ? (
-                      cards.map((card) => (
-                        <Cell
-                          key={card.id}
-                          expandable="auto"
-                          before={
-                            card.assignee_avatar ? (
-                              <Avatar size={28} src={card.assignee_avatar} />
-                            ) : (
-                              <Icon28UserOutline />
-                            )
-                          }
-                          onClick={() => handleCardClick(card)}
-                          after={
-                            <TimeAgo
-                              date={card.created}
-                              formatter={formatter}
-                              live={true}
-                            />
-                          }
-                        >
-                          {card.summary}
-                        </Cell>
-                      ))
-                    ) : (
-                      <Placeholder
-                        icon={<Logo />}
-                        header="Инциденты отсутствуют"
-                      />
-                    )
-                  ) : (
-                    <Placeholder
-                      icon={<Logo />}
-                      header={
-                        '"Не все то золото, что блестит, и не все то зло, что прячется в тени."'
-                      }
-                    >
-                      Афродита вас не знает!
-                    </Placeholder>
-                  )}
-                </Group>
-              </Accordion.Content>
-            </Accordion>
+            <Group>
+              {token ? (
+                Object.keys(tasks).length !== 0 ? (
+                  Object.keys(tasks).map((label) => (
+                    <Accordion key={label} defaultExpanded={true}>
+                      <Accordion.Summary>{label}</Accordion.Summary>
+                      <Accordion.Content>
+                        {tasks[label].map((task) => (
+                          <Cell
+                            key={task.id}
+                            expandable="auto"
+                            before={
+                              task.assignee_avatar ? (
+                                <Avatar size={28} src={task.assignee_avatar} />
+                              ) : (
+                                <Icon28UserOutline />
+                              )
+                            }
+                            onClick={() => handleTaskClick(task)}
+                            after={
+                              <TimeAgo
+                                date={task.created}
+                                formatter={formatter}
+                                live={true}
+                              />
+                            }
+                          >
+                            {task.summary}
+                          </Cell>
+                        ))}
+                      </Accordion.Content>
+                    </Accordion>
+                  ))
+                ) : (
+                  <Placeholder icon={<Logo />} header="Инциденты отсутствуют" />
+                )
+              ) : (
+                <Placeholder
+                  icon={<Logo />}
+                  header={
+                    '"Не все то золото, что блестит, и не все то зло, что прячется в тени."'
+                  }
+                >
+                  Афродита вас не знает!
+                </Placeholder>
+              )}
+            </Group>
           )}
         </Panel>
         <Panel id="panel2">
-          {selectedCard && (
+          {selectedTask && (
             <>
               <PanelHeader
                 delimiter="spacing"
@@ -220,14 +216,14 @@ const MainScreens = () => {
                   />
                 }
               >
-                <PanelHeaderContent status={selectedCard.created}>
-                  {selectedCard.summary}
+                <PanelHeaderContent status={selectedTask.created}>
+                  {selectedTask.summary}
                 </PanelHeaderContent>
               </PanelHeader>
               <Group>
                 <div
                   style={{ padding: "0 10px" }}
-                  dangerouslySetInnerHTML={{ __html: selectedCard.description }}
+                  dangerouslySetInnerHTML={{ __html: selectedTask.description }}
                 />
               </Group>
               <FixedLayout filled vertical="bottom">
