@@ -275,7 +275,7 @@ const MainScreens = () => {
                 </PanelHeaderContent>
               </PanelHeader>
               <Group>
-                {selectedTask.label === "" ?? (
+                {!selectedTask.labels ?? (
                   <Div>
                     <Banner
                       before={<Avatar src="../aphrodita_logo.png" />}
