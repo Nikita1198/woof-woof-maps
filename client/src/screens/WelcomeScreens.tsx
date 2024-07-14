@@ -57,12 +57,38 @@ const MainScreens = () => {
 
   const clearPopout = () => setPopout(null);
 
-  const setDoneScreenSpinner = () => {
+  const updateTaskStatus = async (taskId, newStatus) => {
+    try {
+      const response = await fetch(
+        "https://katya-agro.ru/api/api/update_task_status",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            "x-access-tokens": token,
+          },
+          body: JSON.stringify({ task_id: taskId, new_status: newStatus }),
+        }
+      );
+
+      if (!response.ok) {
+        throw new Error("Failed to update task status");
+      }
+
+      return response.json();
+    } catch (error) {
+      console.error("Error updating task status:", error);
+      throw error;
+    }
+  };
+
+  const setDoneScreenSpinner = async (newStatus) => {
     setPopout(<ScreenSpinner state="loading" />);
 
-    setTimeout(() => {
-      setPopout(<ScreenSpinner state="done">Успешно</ScreenSpinner>);
+    try {
+      await updateTaskStatus(selectedTask.id, newStatus);
 
+      setPopout(<ScreenSpinner state="done">Успешно</ScreenSpinner>);
       setTimeout(clearPopout, 1000);
 
       const updatedTasks = { ...tasks };
@@ -88,7 +114,10 @@ const MainScreens = () => {
       }
       setTasks(updatedTasks);
       setActivePanel("panel1");
-    }, 2000);
+    } catch (error) {
+      setPopout(<ScreenSpinner state="error">Произошла ошибка</ScreenSpinner>);
+      setTimeout(clearPopout, 2000);
+    }
   };
 
   const formatter = buildFormatter(russianStrings);
@@ -297,7 +326,7 @@ const MainScreens = () => {
                       align="center"
                     >
                       <Button
-                        onClick={setDoneScreenSpinner}
+                        onClick={() => setDoneScreenSpinner("BH")}
                         size="m"
                         appearance="negative"
                         stretched
@@ -305,7 +334,7 @@ const MainScreens = () => {
                         БХ
                       </Button>
                       <Button
-                        onClick={setDoneScreenSpinner}
+                        onClick={() => setDoneScreenSpinner("NORMAL")}
                         size="m"
                         appearance="positive"
                         stretched
