@@ -362,7 +362,7 @@ const MainScreens = () => {
               )}
             </Group>
           )}
-          {filtersStyle && (
+          {filtersStyle.length > 0 && (
             <FixedLayout filled vertical="bottom">
               <Separator wide />
               <Group style={{ padding: 15, paddingBottom: 20 }}>
