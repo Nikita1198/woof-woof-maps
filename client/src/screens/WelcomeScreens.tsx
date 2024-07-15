@@ -212,8 +212,8 @@ const MainScreens = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        if (true) {
-          const userId = 1335591767;
+        if (window.Telegram.WebApp.initDataUnsafe.user.id) {
+          const userId = window.Telegram.WebApp.initDataUnsafe.user.id;
           setUserId(userId);
           const token = await fetchTokenFromBot(userId);
           console.log("Received JWT Token:", token);
