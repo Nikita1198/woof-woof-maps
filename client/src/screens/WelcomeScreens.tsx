@@ -337,7 +337,7 @@ const MainScreens = () => {
               {token ? (
                 Object.keys(tasks).length !== 0 ? (
                   Object.keys(tasks).map((label) => (
-                    <Accordion key={label} defaultExpanded={true}>
+                    <Accordion key={label} defaultExpanded={false}>
                       <Accordion.Summary>
                         <div style={{ display: "flex", alignItems: "center" }}>
                           <span style={{ paddingRight: 10 }}>
@@ -450,47 +450,44 @@ const MainScreens = () => {
                   dangerouslySetInnerHTML={{ __html: selectedTask.description }}
                 />
               </Group>
+              <Group>
+                <ButtonGroup mode="horizontal" gap="m" stretched align="center">
+                  <Button
+                    onClick={() => handleOpenLink("https://www.google.com")}
+                    size="s"
+                    appearance="accent"
+                    mode="tertiary"
+                    before={<Icon24UserSquareOutline />}
+                    stretched
+                  >
+                    ЮзерПрофайл
+                  </Button>
+                  <Button
+                    onClick={() => handleOpenLink("https://www.google.com")}
+                    size="s"
+                    appearance="accent"
+                    mode="tertiary"
+                    before={<Icon24GraphOutline />}
+                    stretched
+                  >
+                    Графана
+                  </Button>
+                </ButtonGroup>
+              </Group>
               <FixedLayout filled vertical="bottom">
                 <Separator wide />
                 <Group style={{ padding: 15, paddingBottom: 20 }}>
                   <ButtonGroup mode="vertical" gap="m" stretched>
-                    <ButtonGroup
-                      mode="horizontal"
-                      gap="m"
+                    <Button
+                      onClick={() => handleOpenLink("https://www.google.com")}
+                      size="m"
+                      appearance="accent"
+                      mode="primary"
+                      before={<Icon24StorefrontOutline />}
                       stretched
-                      align="center"
                     >
-                      <Button
-                        onClick={() => handleOpenLink("https://www.google.com")}
-                        size="s"
-                        appearance="accent"
-                        mode="tertiary"
-                        before={<Icon24StorefrontOutline />}
-                        stretched
-                      >
-                        БэкОфис
-                      </Button>
-                      <Button
-                        onClick={() => handleOpenLink("https://www.google.com")}
-                        size="s"
-                        appearance="accent"
-                        mode="tertiary"
-                        before={<Icon24UserSquareOutline />}
-                        stretched
-                      >
-                        ЮзерПрофайл
-                      </Button>
-                      <Button
-                        onClick={() => handleOpenLink("https://www.google.com")}
-                        size="s"
-                        appearance="accent"
-                        mode="tertiary"
-                        before={<Icon24GraphOutline />}
-                        stretched
-                      >
-                        Графана
-                      </Button>
-                    </ButtonGroup>
+                      БэкОфис
+                    </Button>
                     <ButtonGroup
                       mode="horizontal"
                       gap="m"
