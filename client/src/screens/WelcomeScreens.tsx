@@ -330,13 +330,13 @@ const MainScreens = () => {
             action: () => setDoneScreenSpinner("BH"),
           },
           {
+            title: "Отмена",
+            mode: "cancel",
+          },
+          {
             title: "Нормальный",
             mode: "default",
             action: () => setDoneScreenSpinner("NORMAL"),
-          },
-          {
-            title: "Отмена",
-            mode: "cancel",
           },
         ]}
         actionsLayout="horizontal"
