@@ -362,30 +362,32 @@ const MainScreens = () => {
               )}
             </Group>
           )}
-          <FixedLayout filled vertical="bottom">
-            <Separator wide />
-            <Group style={{ padding: 15, paddingBottom: 20 }}>
-              <ButtonGroup mode="vertical" gap="m" stretched>
-                {/* <Search defaultValue="value" after={false} /> */}
-                <SubnavigationButton
-                  before={<Icon24Filter />}
-                  selected={filtersCount > 0}
-                  expandable
-                  after={
-                    filtersCount > 0 && (
-                      <Counter size="s">
-                        <VisuallyHidden>Применено: </VisuallyHidden>
-                        {filtersCount}
-                      </Counter>
-                    )
-                  }
-                  onClick={openModal}
-                >
-                  Фильтры
-                </SubnavigationButton>
-              </ButtonGroup>
-            </Group>
-          </FixedLayout>
+          {filtersStyle && (
+            <FixedLayout filled vertical="bottom">
+              <Separator wide />
+              <Group style={{ padding: 15, paddingBottom: 20 }}>
+                <ButtonGroup mode="vertical" gap="m" stretched>
+                  {/* <Search defaultValue="value" after={false} /> */}
+                  <SubnavigationButton
+                    before={<Icon24Filter />}
+                    selected={filtersCount > 0}
+                    expandable
+                    after={
+                      filtersCount > 0 && (
+                        <Counter size="s">
+                          <VisuallyHidden>Применено: </VisuallyHidden>
+                          {filtersCount}
+                        </Counter>
+                      )
+                    }
+                    onClick={openModal}
+                  >
+                    Фильтры
+                  </SubnavigationButton>
+                </ButtonGroup>
+              </Group>
+            </FixedLayout>
+          )}
         </Panel>
         <Panel id="panel2">
           {selectedTask && (
