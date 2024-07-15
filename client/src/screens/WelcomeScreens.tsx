@@ -1,4 +1,6 @@
 import {
+  Icon24Dismiss,
+  Icon24Filter,
   Icon24GraphOutline,
   Icon24StorefrontOutline,
   Icon24UserSquareOutline,
@@ -21,6 +23,19 @@ import {
   Accordion,
   Div,
   Banner,
+  Search,
+  SubnavigationButton,
+  ModalRoot,
+  ModalPage,
+  ModalPageHeader,
+  PanelHeaderClose,
+  PanelHeaderButton,
+  FormLayoutGroup,
+  FormItem,
+  Checkbox,
+  usePlatform,
+  Counter,
+  VisuallyHidden,
 } from "@vkontakte/vkui";
 
 import TimeAgo from "react-timeago";
@@ -29,7 +44,7 @@ import buildFormatter from "react-timeago/lib/formatters/buildFormatter";
 
 import { Panel } from "@vkontakte/vkui/dist/components/Panel/Panel";
 import { View } from "@vkontakte/vkui/dist/components/View/View";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Logo from "../components/Logo";
 
 declare global {
@@ -47,6 +62,8 @@ const MainScreens = () => {
   const [token, setToken] = useState(null);
   const [popout, setPopout] = useState(<ScreenSpinner state="loading" />);
   const [loading, setLoading] = useState(true);
+  const [filtersStyle, setFiltersStyle] = useState([]); // State for filters style
+  const pollingRef = useRef(null);
 
   const handleTaskClick = (task) => {
     setSelectedTask(task);
@@ -154,6 +171,26 @@ const MainScreens = () => {
       if (data.tasks) {
         console.log(data);
         setTasks(data.tasks);
+
+        const uniqueLabels = new Set<string>();
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        Object.values(data.tasks).forEach((taskGroup: any) =>
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
+          (taskGroup as any[]).forEach((task) =>
+            task.labels.forEach((label: string) => {
+              if (label === "") {
+                label = "Мистика Афродиты";
+              }
+              uniqueLabels.add(label);
+            })
+          )
+        );
+
+        const filters = Array.from(uniqueLabels).map((label) => ({
+          value: label,
+          label: label,
+        }));
+        setFiltersStyle(filters);
       } else {
         console.error("Unexpected response format:", data);
         throw new Error("Unexpected response format");
@@ -165,15 +202,17 @@ const MainScreens = () => {
   };
 
   const startPolling = (token, interval = 10000) => {
+    if (pollingRef.current) {
+      clearInterval(pollingRef.current);
+    }
     fetchTasks(token);
-    const polling = setInterval(() => fetchTasks(token), interval);
-    return () => clearInterval(polling);
+    pollingRef.current = setInterval(() => fetchTasks(token), interval);
   };
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        if (window.Telegram?.WebApp?.initDataUnsafe?.user?.id) {
+        if (window.Telegram.WebApp.initDataUnsafe.user.id) {
           const userId = window.Telegram.WebApp.initDataUnsafe.user.id;
           setUserId(userId);
           const token = await fetchTokenFromBot(userId);
@@ -181,8 +220,6 @@ const MainScreens = () => {
           setToken(token);
           await fetchTasks(token);
           startPolling(token);
-        } else {
-          throw new Error("User ID not found");
         }
       } catch (error) {
         console.error("Initialization error:", error);
@@ -193,10 +230,80 @@ const MainScreens = () => {
     };
 
     fetchData();
+
+    return () => {
+      if (pollingRef.current) {
+        clearInterval(pollingRef.current);
+      }
+    };
   }, []);
 
+  //Modal
+  const [filtersModalOpened, setFiltersModalOpened] = useState(false);
+  const [filtersCount, setFiltersCount] = useState(0);
+
+  const platform = usePlatform();
+
+  const openModal = () => {
+    setFiltersModalOpened(true);
+  };
+
+  const closeModal = () => {
+    setFiltersModalOpened(false);
+  };
+
+  const modal = (
+    <ModalRoot
+      activeModal={filtersModalOpened ? "filters" : null}
+      onClose={closeModal}
+    >
+      <ModalPage
+        id={"filters"}
+        header={
+          <ModalPageHeader
+            before={
+              platform !== "ios" && <PanelHeaderClose onClick={closeModal} />
+            }
+            after={
+              platform === "ios" && (
+                <PanelHeaderButton onClick={closeModal} aria-label="exit">
+                  <Icon24Dismiss />
+                </PanelHeaderButton>
+              )
+            }
+          >
+            Фильтры
+          </ModalPageHeader>
+        }
+      >
+        <FormLayoutGroup>
+          <FormItem top="Вид инцидента">
+            {filtersStyle.map(({ value, label }) => {
+              return (
+                <Checkbox key={value} value={value}>
+                  {label}
+                </Checkbox>
+              );
+            })}
+          </FormItem>
+
+          <FormItem>
+            <Button size="l" stretched>
+              Показать результаты
+            </Button>
+          </FormItem>
+        </FormLayoutGroup>
+      </ModalPage>
+    </ModalRoot>
+  );
+
   return (
-    <SplitLayout popout={popout} aria-live="polite" aria-busy={!!popout}>
+    <SplitLayout
+      popout={popout}
+      aria-live="polite"
+      aria-busy={!!popout}
+      modal={modal}
+    >
       <View activePanel={activePanel}>
         <Panel id="panel1">
           <PanelHeader>
@@ -254,6 +361,32 @@ const MainScreens = () => {
                 </Placeholder>
               )}
             </Group>
+          )}
+          {tasks.length > 0 && (
+            <FixedLayout filled vertical="bottom">
+              <Separator wide />
+              <Group style={{ padding: 15, paddingBottom: 20 }}>
+                <ButtonGroup mode="vertical" gap="m" stretched>
+                  {/* <Search defaultValue="value" after={false} /> */}
+                  <SubnavigationButton
+                    before={<Icon24Filter />}
+                    selected={filtersCount > 0}
+                    expandable
+                    after={
+                      filtersCount > 0 && (
+                        <Counter size="s">
+                          <VisuallyHidden>Применено: </VisuallyHidden>
+                          {filtersCount}
+                        </Counter>
+                      )
+                    }
+                    onClick={openModal}
+                  >
+                    Фильтры
+                  </SubnavigationButton>
+                </ButtonGroup>
+              </Group>
+            </FixedLayout>
           )}
         </Panel>
         <Panel id="panel2">
