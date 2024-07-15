@@ -1,6 +1,7 @@
 import {
   Icon24Dismiss,
   Icon24Filter,
+  Icon24GavelOutline,
   Icon24GraphOutline,
   Icon24StorefrontOutline,
   Icon24UserSquareOutline,
@@ -36,6 +37,7 @@ import {
   usePlatform,
   Counter,
   VisuallyHidden,
+  Alert,
 } from "@vkontakte/vkui";
 
 import TimeAgo from "react-timeago";
@@ -212,8 +214,8 @@ const MainScreens = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        if (window.Telegram.WebApp.initDataUnsafe.user.id) {
-          const userId = window.Telegram.WebApp.initDataUnsafe.user.id;
+        if (true) {
+          const userId = 1123817078;
           setUserId(userId);
           const token = await fetchTokenFromBot(userId);
           console.log("Received JWT Token:", token);
@@ -317,6 +319,49 @@ const MainScreens = () => {
       </ModalPage>
     </ModalRoot>
   );
+
+  const openAction = () => {
+    setPopout(
+      <Alert
+        actions={[
+          {
+            title: "БХ",
+            mode: "destructive",
+            action: () => setDoneScreenSpinner("BH"),
+          },
+          {
+            title: "Нормальный",
+            mode: "default",
+            action: () => setDoneScreenSpinner("NORMAL"),
+          },
+          {
+            title: "Отмена",
+            mode: "cancel",
+          },
+        ]}
+        actionsLayout="vertical"
+        renderAction={({ mode, ...restProps }) => {
+          return (
+            <Button
+              mode={mode === "cancel" ? "secondary" : "primary"}
+              size="m"
+              appearance={
+                mode !== "cancel"
+                  ? mode == "destructive"
+                    ? "negative"
+                    : "positive"
+                  : "neutral"
+              }
+              {...restProps}
+            />
+          );
+        }}
+        onClose={() => setPopout(null)}
+        header="Подтвердите действие"
+        text="От вас зависит судьба смертного. Проявите мудрость, подобную Афине. Кто этот грешник?"
+      />
+    );
+  };
 
   return (
     <SplitLayout
@@ -482,35 +527,21 @@ const MainScreens = () => {
                       onClick={() => handleOpenLink("https://www.google.com")}
                       size="m"
                       appearance="accent"
-                      mode="primary"
                       before={<Icon24StorefrontOutline />}
                       stretched
                     >
                       БэкОфис
                     </Button>
-                    <ButtonGroup
-                      mode="horizontal"
-                      gap="m"
+                    <Button
+                      onClick={openAction}
+                      size="m"
+                      appearance="accent"
+                      mode="secondary"
+                      before={<Icon24GavelOutline />}
                       stretched
-                      align="center"
                     >
-                      <Button
-                        onClick={() => setDoneScreenSpinner("BH")}
-                        size="m"
-                        appearance="negative"
-                        stretched
-                      >
-                        БХ
-                      </Button>
-                      <Button
-                        onClick={() => setDoneScreenSpinner("NORMAL")}
-                        size="m"
-                        appearance="positive"
-                        stretched
-                      >
-                        Нормальный
-                      </Button>
-                    </ButtonGroup>
+                      Дать статус
+                    </Button>
                   </ButtonGroup>
                 </Group>
               </FixedLayout>
