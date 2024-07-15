@@ -240,7 +240,7 @@ const MainScreens = () => {
 
   //Modal
   const [filtersModalOpened, setFiltersModalOpened] = useState(false);
-  const [filtersCount, setFiltersCount] = useState(0);
+  const [filtersCount] = useState(0);
 
   const platform = usePlatform();
 
