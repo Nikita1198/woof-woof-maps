@@ -62,7 +62,7 @@ const MainScreens = () => {
   const [token, setToken] = useState(null);
   const [popout, setPopout] = useState(<ScreenSpinner state="loading" />);
   const [loading, setLoading] = useState(true);
-  const [filtersStyle, setFiltersStyle] = useState([]); // State for filters style
+  const [labels, setLabels] = useState([]);
   const pollingRef = useRef(null);
 
   const handleTaskClick = (task) => {
@@ -190,7 +190,7 @@ const MainScreens = () => {
           value: label,
           label: label,
         }));
-        setFiltersStyle(filters);
+        setLabels(filters);
       } else {
         console.error("Unexpected response format:", data);
         throw new Error("Unexpected response format");
@@ -212,8 +212,8 @@ const MainScreens = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        if (window.Telegram.WebApp.initDataUnsafe.user.id) {
-          const userId = window.Telegram.WebApp.initDataUnsafe.user.id;
+        if (true) {
+          const userId = 1335591767;
           setUserId(userId);
           const token = await fetchTokenFromBot(userId);
           console.log("Received JWT Token:", token);
@@ -240,7 +240,8 @@ const MainScreens = () => {
 
   //Modal
   const [filtersModalOpened, setFiltersModalOpened] = useState(false);
-  const [filtersCount] = useState(0);
+  const [filtersLabels, setFiltersLabels] = useState([]);
+  const [filtersCount, setFiltersCount] = useState(0);
 
   const platform = usePlatform();
 
@@ -250,6 +251,21 @@ const MainScreens = () => {
 
   const closeModal = () => {
     setFiltersModalOpened(false);
+  };
+
+  const applyFilters = () => {
+    closeModal();
+    setFiltersCount(filtersLabels.length);
+  };
+
+  const onChangeFilterStyle = (e) => {
+    const { value, checked } = e.currentTarget;
+    if (checked) {
+      setFiltersLabels([...filtersLabels, value]);
+    } else {
+      setFiltersLabels(filtersLabels.filter((v) => v !== value));
+    }
+    console.log(filtersLabels);
   };
 
   const modal = (
@@ -278,9 +294,14 @@ const MainScreens = () => {
       >
         <FormLayoutGroup>
           <FormItem top="Вид инцидента">
-            {filtersStyle.map(({ value, label }) => {
+            {labels.map(({ value, label }) => {
               return (
-                <Checkbox key={value} value={value}>
+                <Checkbox
+                  key={value}
+                  value={value}
+                  checked={filtersLabels.includes(value)}
+                  onChange={onChangeFilterStyle}
+                >
                   {label}
                 </Checkbox>
               );
@@ -288,7 +309,7 @@ const MainScreens = () => {
           </FormItem>
 
           <FormItem>
-            <Button size="l" stretched>
+            <Button size="l" stretched onClick={applyFilters}>
               Показать результаты
             </Button>
           </FormItem>
@@ -318,7 +339,14 @@ const MainScreens = () => {
                   Object.keys(tasks).map((label) => (
                     <Accordion key={label} defaultExpanded={true}>
                       <Accordion.Summary>
-                        {label === "" ? "Мистика Афродиты" : label}
+                        <div style={{ display: "flex", alignItems: "center" }}>
+                          <span style={{ paddingRight: 10 }}>
+                            {label === "" ? "Мистика Афродиты" : label}
+                          </span>
+                          <Counter size="m" mode="contrast">
+                            {tasks[label].length}
+                          </Counter>
+                        </div>
                       </Accordion.Summary>
                       <Accordion.Content>
                         {tasks[label].map((task) => (
@@ -362,7 +390,7 @@ const MainScreens = () => {
               )}
             </Group>
           )}
-          {filtersStyle.length > 0 && (
+          {labels.length > 0 && (
             <FixedLayout filled vertical="bottom">
               <Separator wide />
               <Group style={{ padding: 15, paddingBottom: 20 }}>
