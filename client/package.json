@@ -14,6 +14,7 @@
     "@vkontakte/icons": "^2.105.0",
     "@vkontakte/vkui": "^6.2.1",
     "@vkruglikov/react-telegram-web-app": "^2.1.9",
+    "date-fns": "^3.6.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-timeago": "^7.2.0"

@@ -40,6 +40,9 @@ import {
   Alert,
 } from "@vkontakte/vkui";
 
+import { format } from "date-fns";
+import { ru } from "date-fns/locale";
+
 import TimeAgo from "react-timeago";
 import russianStrings from "react-timeago/lib/language-strings/ru";
 import buildFormatter from "react-timeago/lib/formatters/buildFormatter";
@@ -55,6 +58,11 @@ declare global {
     Telegram: any;
   }
 }
+
+const formatDate = (dateString) => {
+  const date = new Date(dateString);
+  return format(date, "dd MMMM yyyy, HH:mm:ss", { locale: ru });
+};
 
 const MainScreens = () => {
   const [tasks, setTasks] = useState([]);
@@ -475,7 +483,7 @@ const MainScreens = () => {
                   />
                 }
               >
-                <PanelHeaderContent status={selectedTask.created}>
+                <PanelHeaderContent status={formatDate(selectedTask.created)}>
                   {selectedTask.summary}
                 </PanelHeaderContent>
               </PanelHeader>
