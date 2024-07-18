@@ -325,6 +325,11 @@ const MainScreens = () => {
       <Alert
         actions={[
           {
+            title: "Нормальный",
+            mode: "default",
+            action: () => setDoneScreenSpinner("NORMAL"),
+          },
+          {
             title: "БХ",
             mode: "destructive",
             action: () => setDoneScreenSpinner("BH"),
@@ -333,14 +338,8 @@ const MainScreens = () => {
             title: "Отмена",
             mode: "cancel",
           },
-          {
-            title: "Нормальный",
-            mode: "default",
-            action: () => setDoneScreenSpinner("NORMAL"),
-          },
         ]}
-        actionsLayout="horizontal"
-        dismissButtonMode="inside"
+        actionsLayout="vertical"
         renderAction={({ mode, ...restProps }) => {
           return (
             <Button
@@ -441,7 +440,6 @@ const MainScreens = () => {
               <Separator wide />
               <Group style={{ padding: 15, paddingBottom: 20 }}>
                 <ButtonGroup mode="vertical" gap="m" stretched>
-                  {/* <Search defaultValue="value" after={false} /> */}
                   <SubnavigationButton
                     before={<Icon24Filter />}
                     selected={filtersCount > 0}
@@ -493,7 +491,9 @@ const MainScreens = () => {
                 )}
                 <div
                   style={{ padding: "0 10px" }}
-                  dangerouslySetInnerHTML={{ __html: selectedTask.description }}
+                  dangerouslySetInnerHTML={{
+                    __html: selectedTask.description.replace(/\n/g, "<br>"),
+                  }}
                 />
               </Group>
               <Group>
