@@ -499,22 +499,24 @@ const MainScreens = () => {
               <Group>
                 <ButtonGroup mode="horizontal" gap="m" stretched align="center">
                   <Button
-                    onClick={() => handleOpenLink("https://www.google.com")}
+                    onClick={() => handleOpenLink(selectedTask.user_profile)}
                     size="s"
                     appearance="accent"
                     mode="tertiary"
                     before={<Icon24UserSquareOutline />}
                     stretched
+                    disabled={!selectedTask.user_profile}
                   >
                     ЮзерПрофайл
                   </Button>
                   <Button
-                    onClick={() => handleOpenLink("https://www.google.com")}
+                    onClick={() => handleOpenLink(selectedTask.graphana)}
                     size="s"
                     appearance="accent"
                     mode="tertiary"
                     before={<Icon24GraphOutline />}
                     stretched
+                    disabled={!selectedTask.graphana}
                   >
                     Графана
                   </Button>
@@ -525,11 +527,12 @@ const MainScreens = () => {
                 <Group style={{ padding: 15, paddingBottom: 20 }}>
                   <ButtonGroup mode="vertical" gap="m" stretched>
                     <Button
-                      onClick={() => handleOpenLink("https://www.google.com")}
+                      onClick={() => handleOpenLink(selectedTask.back_office)}
                       size="m"
                       appearance="accent"
                       before={<Icon24StorefrontOutline />}
                       stretched
+                      disabled={!selectedTask.back_office}
                     >
                       БэкОфис
                     </Button>
