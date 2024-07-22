@@ -1,10 +1,5 @@
-import { Suspense, lazy } from "react";
-import {
-  AppRoot,
-  ConfigProvider,
-  AdaptivityProvider,
-  Spinner,
-} from "@vkontakte/vkui";
+import { lazy } from "react";
+import { AppRoot, ConfigProvider, AdaptivityProvider } from "@vkontakte/vkui";
 import "@vkontakte/vkui/dist/vkui.css";
 import "./App.css";
 import { useThemeParams } from "@vkruglikov/react-telegram-web-app";
@@ -18,9 +13,7 @@ function App() {
     <ConfigProvider appearance={colorScheme}>
       <AdaptivityProvider>
         <AppRoot>
-          <Suspense fallback={<Spinner size="large" />}>
-            <WelcomeScreens />
-          </Suspense>
+          <WelcomeScreens />
         </AppRoot>
       </AdaptivityProvider>
     </ConfigProvider>

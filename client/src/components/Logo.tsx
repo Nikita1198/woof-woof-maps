@@ -1,6 +1,6 @@
 import { memo } from "react";
 
-const Logo = memo(() => (
+const Logo = memo(({ ...prop }) => (
   <img
     src="../aphrodita_logo.png"
     width={170}
@@ -8,6 +8,7 @@ const Logo = memo(() => (
     alt="Logo"
     loading="lazy"
     style={{ display: "block", margin: "0 auto" }}
+    {...prop}
   />
 ));
 

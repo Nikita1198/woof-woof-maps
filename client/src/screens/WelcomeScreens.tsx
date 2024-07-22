@@ -24,7 +24,6 @@ import {
   Accordion,
   Div,
   Banner,
-  //Search,
   SubnavigationButton,
   ModalRoot,
   ModalPage,
@@ -38,6 +37,7 @@ import {
   Counter,
   VisuallyHidden,
   Alert,
+  Footnote,
 } from "@vkontakte/vkui";
 
 import { format } from "date-fns";
@@ -51,6 +51,7 @@ import { Panel } from "@vkontakte/vkui/dist/components/Panel/Panel";
 import { View } from "@vkontakte/vkui/dist/components/View/View";
 import { useEffect, useRef, useState } from "react";
 import Logo from "../components/Logo";
+import { DNA } from "react-loader-spinner";
 
 declare global {
   interface Window {
@@ -66,14 +67,21 @@ const formatDate = (dateString) => {
 
 const MainScreens = () => {
   const [tasks, setTasks] = useState([]);
-  const [activePanel, setActivePanel] = useState("panel1");
+  const [activePanel, setActivePanel] = useState("spinner");
   const [selectedTask, setSelectedTask] = useState(null);
   const [userId, setUserId] = useState(null);
   const [token, setToken] = useState(null);
-  const [popout, setPopout] = useState(<ScreenSpinner state="loading" />);
+  const [popout, setPopout] = useState(null);
   const [loading, setLoading] = useState(true);
   const [labels, setLabels] = useState([]);
   const pollingRef = useRef(null);
+
+  const platform = usePlatform();
+
+  //Modal dialog
+  const [filtersModalOpened, setFiltersModalOpened] = useState(false);
+  const [filtersLabels, setFiltersLabels] = useState([]);
+  const [filtersCount, setFiltersCount] = useState(0);
 
   const handleTaskClick = (task) => {
     setSelectedTask(task);
@@ -219,26 +227,29 @@ const MainScreens = () => {
     pollingRef.current = setInterval(() => fetchTasks(token), interval);
   };
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        if (window.Telegram.WebApp.initDataUnsafe.user.id) {
-          const userId = window.Telegram.WebApp.initDataUnsafe.user.id;
-          setUserId(userId);
-          const token = await fetchTokenFromBot(userId);
-          console.log("Received JWT Token:", token);
-          setToken(token);
-          await fetchTasks(token);
-          startPolling(token);
-        }
-      } catch (error) {
-        console.error("Initialization error:", error);
-      } finally {
-        setLoading(false);
-        clearPopout();
-      }
-    };
+  const fetchData = async () => {
+    try {
+      if (window.Telegram.WebApp.initDataUnsafe.user.id) {
+        const userId = window.Telegram.WebApp.initDataUnsafe.user.id;
+        setUserId(userId);
 
+        const token = await fetchTokenFromBot(userId);
+        setToken(token);
+        console.log("Received JWT Token:", token);
+        if (!token) return setLoading(false);
+
+        await fetchTasks(token).then(() => {
+          setActivePanel("panel1");
+        });
+        startPolling(token);
+      }
+    } catch (error) {
+      console.error("Initialization error:", error);
+      setTimeout(() => setLoading(false), 1000);
+    }
+  };
+
+  useEffect(() => {
     fetchData();
 
     return () => {
@@ -247,13 +258,6 @@ const MainScreens = () => {
       }
     };
   }, []);
-
-  //Modal
-  const [filtersModalOpened, setFiltersModalOpened] = useState(false);
-  const [filtersLabels, setFiltersLabels] = useState([]);
-  const [filtersCount, setFiltersCount] = useState(0);
-
-  const platform = usePlatform();
 
   const openModal = () => {
     setFiltersModalOpened(true);
@@ -379,70 +383,88 @@ const MainScreens = () => {
       modal={modal}
     >
       <View activePanel={activePanel}>
+        <Panel id="spinner">
+          <Group>
+            <Div style={{ height: "32px" }} />
+            <Placeholder
+              icon={<Logo />}
+              action={
+                loading && (
+                  <DNA
+                    visible={true}
+                    height="80"
+                    width="80"
+                    ariaLabel="dna-loading"
+                    wrapperStyle={{}}
+                    wrapperClass="dna-wrapper"
+                  />
+                )
+              }
+              header={
+                loading
+                  ? ""
+                  : '"Не все то золото, что блестит, и не все то зло, что прячется в тени."'
+              }
+            >
+              {loading ? "" : "Афродита вас не знает!"}
+            </Placeholder>
+            <Div style={{ position: "absolute", bottom: 10 }}>
+              <Footnote>V2.0</Footnote>
+              <Footnote caps>by Data Analytics</Footnote>
+            </Div>
+          </Group>
+        </Panel>
         <Panel id="panel1">
           <PanelHeader>
             <PanelHeaderContent status={userId ? `MyID: ${userId}` : null}>
               Инциденты
             </PanelHeaderContent>
           </PanelHeader>
-          {!loading && (
-            <Group>
-              {token ? (
-                Object.keys(tasks).length !== 0 ? (
-                  Object.keys(tasks).map((label) => (
-                    <Accordion key={label} defaultExpanded={false}>
-                      <Accordion.Summary>
-                        <div style={{ display: "flex", alignItems: "center" }}>
-                          <span style={{ paddingRight: 10 }}>
-                            {label === "" ? "Мистика Афродиты" : label}
-                          </span>
-                          <Counter size="m" mode="contrast">
-                            {tasks[label].length}
-                          </Counter>
-                        </div>
-                      </Accordion.Summary>
-                      <Accordion.Content>
-                        {tasks[label].map((task) => (
-                          <Cell
-                            key={task.id}
-                            expandable="auto"
-                            before={
-                              task.assignee_avatar ? (
-                                <Avatar size={28} src={task.assignee_avatar} />
-                              ) : (
-                                <Icon28UserOutline />
-                              )
-                            }
-                            onClick={() => handleTaskClick(task)}
-                            after={
-                              <TimeAgo
-                                date={task.created}
-                                formatter={formatter}
-                                live={true}
-                              />
-                            }
-                          >
-                            {task.summary}
-                          </Cell>
-                        ))}
-                      </Accordion.Content>
-                    </Accordion>
-                  ))
-                ) : (
-                  <Placeholder icon={<Logo />} header="Инциденты отсутствуют" />
-                )
-              ) : (
-                <Placeholder
-                  icon={<Logo />}
-                  header={
-                    '"Не все то золото, что блестит, и не все то зло, что прячется в тени."'
-                  }
-                >
-                  Афродита вас не знает!
-                </Placeholder>
-              )}
-            </Group>
-          )}
+          <Group>
+            {Object.keys(tasks).length !== 0 ? (
+              Object.keys(tasks).map((label) => (
+                <Accordion key={label} defaultExpanded={false}>
+                  <Accordion.Summary>
+                    <div style={{ display: "flex", alignItems: "center" }}>
+                      <span style={{ paddingRight: 10 }}>
+                        {label === "" ? "Мистика Афродиты" : label}
+                      </span>
+                      <Counter size="m" mode="contrast">
+                        {tasks[label].length}
+                      </Counter>
+                    </div>
+                  </Accordion.Summary>
+                  <Accordion.Content>
+                    {tasks[label].map((task) => (
+                      <Cell
+                        key={task.id}
+                        expandable="auto"
+                        before={
+                          task.assignee_avatar ? (
+                            <Avatar size={28} src={task.assignee_avatar} />
+                          ) : (
+                            <Icon28UserOutline />
+                          )
+                        }
+                        onClick={() => handleTaskClick(task)}
+                        after={
+                          <TimeAgo
+                            date={task.created}
+                            formatter={formatter}
+                            live={true}
+                          />
+                        }
+                      >
+                        {task.summary}
+                      </Cell>
+                    ))}
+                  </Accordion.Content>
+                </Accordion>
+              ))
+            ) : (
+              <Placeholder icon={<Logo />} header="Инциденты отсутствуют" />
+            )}
+          </Group>
           {labels.length > 0 && (
             <FixedLayout filled vertical="bottom">
               <Separator wide />
