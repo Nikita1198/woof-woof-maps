@@ -239,13 +239,13 @@ const MainScreens = () => {
         if (!token) return setLoading(false);
 
         await fetchTasks(token).then(() => {
-          setActivePanel("panel1");
+          setTimeout(() => setActivePanel("panel1"), 1000);
         });
         startPolling(token);
       }
     } catch (error) {
       console.error("Initialization error:", error);
-      setTimeout(() => setLoading(false), 1000);
+      setTimeout(() => setLoading(false), 2000);
     }
   };
 
