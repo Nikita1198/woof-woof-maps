@@ -1,5 +1,4 @@
 import { Div, Group, Panel, Placeholder, Spinner, View } from "@vkontakte/vkui";
-import React from "react";
 import Logo from "./Logo";
 
 export const SpinnerLogo = () => {
