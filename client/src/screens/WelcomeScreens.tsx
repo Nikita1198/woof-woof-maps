@@ -388,8 +388,8 @@ const MainScreens = () => {
             <Div style={{ height: "32px" }} />
             <Placeholder
               icon={<Logo />}
-              action={
-                loading && (
+              header={
+                loading ? (
                   <DNA
                     visible={true}
                     height="80"
@@ -398,12 +398,9 @@ const MainScreens = () => {
                     wrapperStyle={{}}
                     wrapperClass="dna-wrapper"
                   />
+                ) : (
+                  '"Не все то золото, что блестит, и не все то зло, что прячется в тени."'
                 )
-              }
-              header={
-                loading
-                  ? ""
-                  : '"Не все то золото, что блестит, и не все то зло, что прячется в тени."'
               }
             >
               {loading ? "" : "Афродита вас не знает!"}
